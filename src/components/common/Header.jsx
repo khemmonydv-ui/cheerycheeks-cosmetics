@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import { Search, User, ShoppingBag, Menu, X } from "lucide-react";
 import logo from "../../assets/logo.svg";
 import "./Header.css";
 
 const NAV_LINKS = [
-  { label: "Home", href: "/" },
-  { label: "About Us", href: "/about Us" },
-  { label: "Product", href: "/product" },
-  { label: "Contact", href: "/contact" },
+  { label: "Home", to: "/" },
+  { label: "About Us", to: "/about" },
+  { label: "Product", to: "/product" },
+  { label: "Contact", to: "/contact" },
 ];
 
 const ICON_PROPS = { size: 24, strokeWidth: 1.75, "aria-hidden": true };
@@ -15,11 +16,14 @@ const ICON_PROPS = { size: 24, strokeWidth: 1.75, "aria-hidden": true };
 export default function Header({ cartCount = 0 }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [activePath, setActivePath] = useState(
-    typeof window !== "undefined" ? window.location.pathname : "/"
-  );
+  const { pathname } = useLocation();
 
-  // Shadow appears once the page is scrolled
+  // Close the mobile menu whenever the page changes
+  useEffect(() => {
+    setMenuOpen(false);
+  }, [pathname]);
+
+  // Shadow gets deeper once the page is scrolled
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
     onScroll();
@@ -38,18 +42,13 @@ export default function Header({ cartCount = 0 }) {
     };
   }, [menuOpen]);
 
-  const handleNavClick = (href) => {
-    setActivePath(href);
-    setMenuOpen(false);
-  };
-
   return (
     <header className={`header ${scrolled ? "header--scrolled" : ""}`}>
       <div className="container header__inner">
         {/* Logo */}
-        <a href="/" className="header__logo" aria-label="Cherry Cheeks home">
+        <Link to="/" className="header__logo" aria-label="Cherry Cheeks home">
           <img src={logo} alt="Cherry Cheeks" className="header__logo-img" />
-        </a>
+        </Link>
 
         {/* Navigation */}
         <nav
@@ -58,16 +57,17 @@ export default function Header({ cartCount = 0 }) {
           aria-label="Main navigation"
         >
           <ul className="header__links">
-            {NAV_LINKS.map(({ label, href }) => (
-              <li key={href}>
-                <a
-                  href={href}
-                  className={`header__link ${activePath === href ? "is-active" : ""}`}
-                  aria-current={activePath === href ? "page" : undefined}
-                  onClick={() => handleNavClick(href)}
+            {NAV_LINKS.map(({ label, to }) => (
+              <li key={to}>
+                <NavLink
+                  to={to}
+                  end={to === "/"}
+                  className={({ isActive }) =>
+                    `header__link ${isActive ? "is-active" : ""}`
+                  }
                 >
                   {label}
-                </a>
+                </NavLink>
               </li>
             ))}
           </ul>
@@ -78,13 +78,13 @@ export default function Header({ cartCount = 0 }) {
           <button type="button" className="header__icon-btn" aria-label="Search">
             <Search {...ICON_PROPS} />
           </button>
-          <a href="/account" className="header__icon-btn" aria-label="My account">
+          <Link to="/account" className="header__icon-btn" aria-label="My account">
             <User {...ICON_PROPS} />
-          </a>
-          <a href="/cart" className="header__icon-btn" aria-label={`Cart, ${cartCount} items`}>
+          </Link>
+          <Link to="/cart" className="header__icon-btn" aria-label={`Cart, ${cartCount} items`}>
             <ShoppingBag {...ICON_PROPS} />
             <span className="header__badge">{cartCount > 99 ? "99+" : cartCount}</span>
-          </a>
+          </Link>
 
           <button
             type="button"
