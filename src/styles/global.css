@@ -1,0 +1,246 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Roboto:wght@400;500;600;700&display=swap');
+
+/* ======================================
+   ROOT DESIGN SYSTEM
+====================================== */
+
+:root {
+
+  /* BRAND COLORS */
+  --color-primary: #725E8B;
+  --color-primary-hover: #604C79;
+  --color-secondary: #F3EBF6;
+
+  /* NEUTRAL COLORS */
+  --color-white: #FFFFFF;
+  --color-background: #FFFFFF;
+  --color-text: #292331;
+  --color-muted: #77717D;
+  --color-border: #E8E1EC;
+
+  /* TYPOGRAPHY */
+  --font-heading: 'Inter', sans-serif;
+  --font-body: 'Roboto', sans-serif;
+
+  /* FONT SIZES */
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.25rem;
+  --text-2xl: 1.5rem;
+  --text-3xl: 1.875rem;
+  --text-4xl: 2.25rem;
+  --text-5xl: 3rem;
+  --text-6xl: 3.5rem;
+
+  /* CONTAINER */
+  --container-width: 1400px;
+  --page-padding: 16px;
+
+  /* RESPONSIVE LAYOUT */
+  --header-height: 64px;
+  --section-spacing: 48px;
+
+  /* SPACING */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+  --space-16: 64px;
+
+  /* BORDER RADIUS */
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-full: 999px;
+
+  /* TRANSITION */
+  --transition: 0.2s ease;
+}
+
+/* ======================================
+   RESET
+====================================== */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  line-height: 1.6;
+  color: var(--color-text);
+  background: var(--color-background);
+}
+
+#root {
+  width: 100%;
+  min-height: 100vh;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-heading);
+  line-height: 1.2;
+  font-weight: 700;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+/* ======================================
+   CONTAINER
+====================================== */
+
+.container {
+  width: 100%;
+  max-width: var(--container-width);
+  margin-inline: auto;
+  padding-inline: var(--page-padding);
+}
+
+/* ======================================
+   SECTION
+====================================== */
+
+.section {
+  padding-block: var(--section-spacing);
+}
+
+/* ======================================
+   TYPOGRAPHY
+====================================== */
+
+.hero-title {
+  font-size: clamp(2.25rem, 5vw, 3.5rem);
+  line-height: 1.15;
+}
+
+.section-title {
+  font-size: clamp(1.75rem, 3vw, 2.25rem);
+}
+
+.body-text {
+  font-size: var(--text-base);
+  line-height: 1.6;
+  color: var(--color-muted);
+}
+
+/* ======================================
+   BUTTONS
+====================================== */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  padding: 14px 28px;
+
+  border: 1px solid transparent;
+  border-radius: var(--radius-full);
+
+  font-size: var(--text-base);
+  font-weight: 500;
+
+  transition: var(--transition);
+}
+
+.btn-primary {
+  background: var(--color-primary);
+  color: var(--color-white);
+}
+
+.btn-primary:hover {
+  background: var(--color-primary-hover);
+}
+
+.btn-secondary {
+  background: var(--color-secondary);
+  color: var(--color-primary);
+}
+
+/* ======================================
+   RESPONSIVE GRID
+====================================== */
+
+.grid {
+  display: grid;
+  gap: 24px;
+}
+
+.grid-products {
+  grid-template-columns: 1fr;
+}
+
+/* ======================================
+   TABLET: 769px - 1024px
+====================================== */
+
+@media (min-width: 769px) {
+
+  :root {
+    --page-padding: 24px;
+    --header-height: 72px;
+    --section-spacing: 64px;
+  }
+
+  .grid-products {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+}
+
+/* ======================================
+   DESKTOP: 1025px+
+====================================== */
+
+@media (min-width: 1025px) {
+
+  :root {
+    --page-padding: 40px;
+    --header-height: 80px;
+    --section-spacing: 80px;
+  }
+
+  .grid-products {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+}
