@@ -1,15 +1,22 @@
-// src/pages/Product.jsx
+// src/pages/Products.jsx
 import { useState } from 'react';
 import SearchBar from '../components/product/SearchBar';
 import FilterTabs from '../components/product/FilterTabs';
 import ProductCard from '../components/product/ProductCard';
 import ProductDetail from '../components/product/ProductDetail';
-import { categories, products } from '../data/products';
+import { categories } from '../data/products';
+import { useProducts } from '../context/ProductsContext';
 
 function Product() {
   const [active, setActive] = useState('All');
   const [query, setQuery] = useState('');
-  const [selected, setSelected] = useState(null);
+  const [selected, setSelected] = useState(null); // the product being viewed
+
+  // Read the shared list (the same one the admin page edits)
+  const { products: allProducts } = useProducts();
+
+  // Customers only see products that are not hidden
+  const products = allProducts.filter((p) => p.visible);
 
   const visible = products.filter((p) => {
     const matchCategory = active === 'All' || p.category === active;
