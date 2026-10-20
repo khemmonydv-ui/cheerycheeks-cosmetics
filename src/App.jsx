@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import MainLayout from "./layouts/MainLayout.jsx";
 import Home from "./pages/Home.jsx";
-
+import Contact from "./pages/Contact.jsx";
 
 // Scroll back to the top whenever the page changes
 function ScrollToTop() {
@@ -19,7 +19,7 @@ function App() {
       <ScrollToTop />
       <Routes>
         <Route path="/" element={<Home />} />
-
+        <Route path="/Contact" element={<Contact />} />
       </Routes>
     </MainLayout>
   );
