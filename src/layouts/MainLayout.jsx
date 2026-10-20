@@ -5,6 +5,7 @@ function MainLayout({ children }) {
     <>
       <Header cartCount={0} />
       <main>{children}</main>
+      
     </>
   );
 }

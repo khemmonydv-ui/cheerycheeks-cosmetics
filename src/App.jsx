@@ -19,6 +19,7 @@ function App() {
       <ScrollToTop />
       <Routes>
         <Route path="/" element={<Home />} />
+      
 
       </Routes>
     </MainLayout>
