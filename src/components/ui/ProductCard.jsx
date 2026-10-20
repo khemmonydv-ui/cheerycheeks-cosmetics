@@ -1,5 +1,5 @@
 import { TubeLotion } from "lucide-react";
-import "../../styles/ProductCard.css";
+import "./ProductCard.css";
 
 const ArrowIcon = () => (
   <svg viewBox="0 0 24 24" width="16" height="16" fill="none" aria-hidden="true">

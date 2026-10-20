@@ -1,5 +1,5 @@
 import { ArrowRight } from "lucide-react";
-import "../../styles/ArticleCard.css";
+import "./ArticleCard.css";
 
 export default function ArticleCard({
   date,
