@@ -1,5 +1,5 @@
 /* ======================================
-   HEADER  (uses tokens from your root CSS)
+   HEADER  (uses tokens from index.css)
 ====================================== */
 
 .header {
@@ -14,8 +14,7 @@
   transition: box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
-/* Layered shadow: a tight contact shadow plus soft, wider ones.
-   Looks more natural than a single blurry shadow. */
+/* Layered shadow once the page is scrolled */
 .header--scrolled {
   border-bottom-color: rgba(232, 225, 236, 0.8);
   box-shadow:
@@ -24,120 +23,51 @@
     0 12px 24px rgba(114, 94, 139, 0.08);
 }
 
+/* MOBILE layout: [burger]   [logo]   [search + cart]  */
 .header__inner {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  justify-content: space-between;
-  gap: var(--space-4);
   height: var(--header-height);
 }
 
-/* ---------- Logo ---------- */
+.header__burger {
+  grid-column: 1;
+  justify-self: start;
+  margin-left: -10px;       /* icon edge lines up with page content */
+  color: var(--color-text);
+}
 
 .header__logo {
+  grid-column: 2;
   display: inline-flex;
   align-items: center;
-  gap: var(--space-2);
-  color: var(--color-primary);
+  justify-self: center;
   flex-shrink: 0;
 }
 
+/*
+  If the logo still looks pushed in from the left, the SVG has empty
+  space inside it. Best fix: crop the SVG to the artwork (see notes).
+  Quick fix: uncomment and tune the negative margin on desktop.
+*/
 .header__logo-img {
-  height: 40px;
-  width: auto;
-}
-
-@media (min-width: 1025px) {
-  .header__logo-img {
-    height: 44px;
-  }
-}
-
-.logo {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-2);
-}
-
-.logo__text {
-  font-family: var(--font-heading);
-  font-size: var(--text-2xl);
-  font-weight: 600;
-  letter-spacing: -0.02em;
-  color: var(--color-primary);
-  white-space: nowrap;
-}
-
-.logo__text span {
-  font-weight: 400;
-  opacity: 0.8;
-}
-
-@media (max-width: 400px) {
-  .logo__text {
-    font-size: var(--text-xl);
-  }
-}
-
-/* ---------- Navigation ---------- */
-
-.header__links {
-  display: flex;
-  flex-direction: column;
-  list-style: none;
-}
-
-.header__link {
-  position: relative;
   display: block;
-  padding: var(--space-3) 0;
-  font-family: var(--font-body);
-  font-size: var(--text-base);
-  font-weight: 500;
-  color: var(--color-text);
-  transition: color var(--transition);
+  height: 32px;
+  width: auto;
+  /* margin-left: -35px; */
 }
-
-.header__link::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: 4px;
-  width: 100%;
-  height: 2px;
-  border-radius: var(--radius-full);
-  background: var(--color-primary);
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform var(--transition);
-}
-
-.header__link:hover,
-.header__link.is-active {
-  color: var(--color-primary);
-}
-
-.header__link:hover::after,
-.header__link.is-active::after {
-  transform: scaleX(1);
-}
-
-.header__link:focus-visible,
-.header__icon-btn:focus-visible,
-.header__burger:focus-visible,
-.header__logo:focus-visible {
-  outline: 2px solid var(--color-primary);
-  outline-offset: 4px;
-  border-radius: var(--radius-sm);
-}
-
-/* ---------- Actions ---------- */
 
 .header__actions {
+  grid-column: 3;
+  justify-self: end;
   display: flex;
   align-items: center;
-  gap: var(--space-2);
+  gap: 0;
+  margin-right: -10px;      /* last icon lines up with page content */
 }
+
+/* ---------- Icon buttons ---------- */
 
 .header__icon-btn {
   position: relative;
@@ -153,15 +83,24 @@
   transition: background var(--transition), color var(--transition);
 }
 
-.header__icon-btn:hover {
+.header__icon-btn:hover,
+.header__icon-btn.is-active {
   background: var(--color-secondary);
   color: var(--color-primary);
 }
 
+.header__icon-btn:focus-visible,
+.header__logo:focus-visible,
+.header__link:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 3px;
+  border-radius: var(--radius-sm);
+}
+
 .header__badge {
   position: absolute;
-  top: 2px;
-  right: 0;
+  top: 3px;
+  right: 1px;
   min-width: 20px;
   height: 20px;
   padding-inline: 5px;
@@ -178,20 +117,19 @@
   border: 2px solid var(--color-white);
 }
 
-/* ---------- Burger (mobile only) ---------- */
-
-.header__burger {
-  color: var(--color-text);
+/* Account icon lives in the mobile menu instead, to keep the bar uncrowded */
+.header__account {
+  display: none;
 }
 
-/* ---------- Mobile drawer (default: < 769px) ---------- */
+/* ---------- Navigation: mobile drawer ---------- */
 
 .header__nav {
   position: fixed;
   top: var(--header-height);
   left: 0;
   right: 0;
-  padding: var(--space-4) var(--page-padding) var(--space-8);
+  padding: var(--space-2) var(--page-padding) var(--space-8);
   background: var(--color-white);
   border-bottom: 1px solid var(--color-border);
   box-shadow: 0 16px 32px rgba(41, 35, 49, 0.08);
@@ -208,13 +146,31 @@
   transform: translateY(0);
 }
 
-.header__nav .header__link {
-  font-size: var(--text-lg);
-  border-bottom: 1px solid var(--color-border);
+.header__links {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
 }
 
-.header__nav .header__link::after {
+.header__link {
+  position: relative;
+  display: block;
+  padding: var(--space-4) 0;
+  font-family: var(--font-body);
+  font-size: var(--text-lg);
+  font-weight: 500;
+  color: var(--color-text);
+  border-bottom: 1px solid var(--color-border);
+  transition: color var(--transition);
+}
+
+.header__link::after {
   display: none;
+}
+
+.header__link:hover,
+.header__link.is-active {
+  color: var(--color-primary);
 }
 
 .header__backdrop {
@@ -224,16 +180,76 @@
   z-index: 1;
 }
 
+/* ---------- Search bar ---------- */
+
+.header__search {
+  position: relative;
+  z-index: 3;
+  background: var(--color-white);
+  border-top: 1px solid var(--color-border);
+  animation: header-search-in 0.2s ease;
+}
+
+.header__search-form {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding-block: var(--space-4);
+}
+
+.header__search-form .input {
+  flex: 1;
+  min-width: 0;
+  border-radius: var(--radius-full);
+  padding-inline: var(--space-6);
+}
+
+@keyframes header-search-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* ======================================
    TABLET + DESKTOP: 769px+
+   DESKTOP layout: [logo]  [nav]  [search account cart]
 ====================================== */
 
 @media (min-width: 769px) {
+  .header__inner {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-4);
+  }
+
   .header__burger,
-  .header__backdrop {
+  .header__backdrop,
+  .header__mobile-only {
     display: none;
   }
 
+  .header__logo {
+    justify-self: auto;
+  }
+
+  .header__logo-img {
+    height: 36px;
+  }
+
+  .header__account {
+    display: inline-flex;
+  }
+
+  .header__actions {
+    gap: var(--space-2);
+  }
+
+  /* Nav sits in the normal flow on desktop */
   .header__nav {
     position: static;
     padding: 0;
@@ -250,14 +266,30 @@
     gap: var(--space-8);
   }
 
-  .header__nav .header__link {
+  .header__link {
+    padding: var(--space-2) 0;
     font-size: var(--text-base);
     border-bottom: none;
-    padding: var(--space-2) 0;
   }
 
-  .header__nav .header__link::after {
+  .header__link::after {
+    content: "";
     display: block;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 2px;
+    border-radius: var(--radius-full);
+    background: var(--color-primary);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform var(--transition);
+  }
+
+  .header__link:hover::after,
+  .header__link.is-active::after {
+    transform: scaleX(1);
   }
 }
 
@@ -266,7 +298,7 @@
     gap: var(--space-12);
   }
 
-  .header__actions {
-    gap: var(--space-3);
+  .header__logo-img {
+    height: 40px;
   }
 }
