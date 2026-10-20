@@ -10,6 +10,9 @@ import {
 } from "lucide-react";
 import "./Footer.css";
 
+
+
+
 /* ---------- Brand icons ----------
    Lucide v1 removed ALL brand logos (Facebook, Instagram, Youtube...), so
    these four are small custom SVGs drawn in the same style. They take the
