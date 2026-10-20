@@ -1,4 +1,9 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { useEffect } from "react";
+import { Routes, Route, useLocation } from "react-router-dom";
+import MainLayout from "./layouts/MainLayout.jsx";
+import Home from "./pages/Home.jsx";
+import Product from "./pages/Products.jsx";
 import { ProductsProvider } from './context/ProductsContext';
 import { AuthProvider } from './context/AuthContext';
 import AdminRoute from './components/admin/AdminRoute';
@@ -32,6 +37,28 @@ function App() {
         </BrowserRouter>
       </ProductsProvider>
     </AuthProvider>
+
+
+// Scroll back to the top whenever the page changes
+function ScrollToTop() {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
+}
+
+function App() {
+  return (
+    <MainLayout>
+      <ScrollToTop />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/products" element={<Product />} />
+      </Routes>
+    </MainLayout>
   );
 }
 
