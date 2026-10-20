@@ -7,7 +7,7 @@ import "./Header.css";
 const NAV_LINKS = [
   { label: "Home", to: "/" },
   { label: "About Us", to: "/about" },
-  { label: "Product", to: "/product" },
+  { label: "Product", to: "/products" },
   { label: "Contact", to: "/contact" },
 ];
 
