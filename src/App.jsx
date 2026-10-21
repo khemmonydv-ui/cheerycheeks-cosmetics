@@ -11,6 +11,7 @@ import AdminLogin from "./pages/admin/AdminLogin";
 import ComingSoon from "./pages/admin/ComingSoon";
 import AdminProducts from "./pages/admin/AdminProducts";
 import "./App.css";
+import Contact from "./pages/Contact.jsx";
 
 // Scroll back to the top whenever the page changes
 function ScrollToTop() {
