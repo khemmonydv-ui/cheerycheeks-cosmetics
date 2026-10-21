@@ -3,6 +3,8 @@ import { Routes, Route, Navigate, Outlet, useLocation } from "react-router-dom";
 import MainLayout from "./layouts/MainLayout.jsx";
 import Home from "./pages/Home.jsx";
 import Products from "./pages/Products.jsx";
+import Cart from "./pages/Cart";
+import { CartProvider } from "./context/CartContext";
 import { ProductsProvider } from "./context/ProductsContext";
 import { AuthProvider } from "./context/AuthContext";
 import AdminRoute from "./components/admin/AdminRoute";
