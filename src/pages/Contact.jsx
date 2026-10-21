@@ -1,11 +1,41 @@
 import "./Contact.css";
 
+// Frontend only: save the message in the browser (same key the admin Messages page reads)
+const STORAGE_KEY = "cherrycheeks_messages";
+
+function addMessage({ name, email, topic, text }) {
+  try {
+    const list = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+    list.unshift({
+      id: Date.now(),
+      name,
+      email,
+      text: topic ? `[${topic}] ${text}` : text,
+      createdAt: new Date().toISOString(),
+      read: false,
+    });
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+  } catch {
+    // storage blocked: ignore
+  }
+}
+
 function Contact() {
   const handleSubmit = (e) => {
     e.preventDefault();
-    // TODO: send the form data to your backend / API here
+    const form = e.target;
+    const topicSelect = form.elements.topic;
+
+    // Frontend only: save in the browser so the admin Messages page can show it
+    addMessage({
+      name: form.elements.name.value.trim(),
+      email: form.elements.email.value.trim(),
+      topic: topicSelect.options[topicSelect.selectedIndex].text,
+      text: form.elements.message.value.trim(),
+    });
+
     alert("Thank you! We'll reply within one business day.");
-    e.target.reset();
+    form.reset();
   };
 
   return (

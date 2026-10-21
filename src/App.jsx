@@ -9,7 +9,7 @@ import { AuthProvider } from "./context/AuthContext";
 import AdminRoute from "./components/admin/AdminRoute";
 import AdminLayout from "./components/admin/AdminLayout";
 import AdminLogin from "./pages/admin/AdminLogin";
-import ComingSoon from "./pages/admin/ComingSoon";
+import ComingSoon from "./pages/admin/Messages.jsx";
 import AdminProducts from "./pages/admin/AdminProducts";
 import "./App.css";
 
