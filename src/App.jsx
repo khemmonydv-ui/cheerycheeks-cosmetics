@@ -15,6 +15,8 @@ import AdminSignup from "./pages/admin/AdminSignup";
 import Messages from "./pages/admin/Messages.jsx";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminProducts from "./pages/admin/AdminProducts";
+import Product from "./pages/Products.jsx";
+import About from "./pages/About.jsx";
 import "./App.css";
 
 // Scroll back to the top whenever the page changes
@@ -34,7 +36,12 @@ function PublicLayout() {
   return (
     <MainLayout>
       <ScrollToTop />
-      <Outlet />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/products" element={<Product />} />
+        <Route path="/about" element={<About />} />
+
+      </Routes>
     </MainLayout>
   );
 }
