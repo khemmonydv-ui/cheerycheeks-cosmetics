@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { Search, User, ShoppingBag, Menu, X } from "lucide-react";
 import logo from "../../assets/Logo.png";
+import { useCart } from "../../context/CartContext"; // added
 import "./Header.css";
 
 const NAV_LINKS = [
@@ -13,7 +14,8 @@ const NAV_LINKS = [
 
 const ICON_PROPS = { size: 24, strokeWidth: 1.75, "aria-hidden": true };
 
-export default function Header({ cartCount = 0 }) {
+export default function Header() {
+  const { cartCount } = useCart(); // added: reads the real cart count
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [query, setQuery] = useState("");
