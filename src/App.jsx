@@ -3,6 +3,7 @@ import { Routes, Route, Navigate, Outlet, useLocation } from "react-router-dom";
 import MainLayout from "./layouts/MainLayout.jsx";
 import Home from "./pages/Home.jsx";
 import Products from "./pages/Products.jsx";
+import Contact from "./pages/Contact.jsx";
 import { ProductsProvider } from "./context/ProductsContext";
 import { AuthProvider } from "./context/AuthContext";
 import AdminRoute from "./components/admin/AdminRoute";
@@ -11,7 +12,6 @@ import AdminLogin from "./pages/admin/AdminLogin";
 import ComingSoon from "./pages/admin/ComingSoon";
 import AdminProducts from "./pages/admin/AdminProducts";
 import "./App.css";
-import Contact from "./pages/Contact.jsx";
 
 // Scroll back to the top whenever the page changes
 function ScrollToTop() {
@@ -45,6 +45,7 @@ function App() {
           <Route element={<PublicLayout />}>
             <Route path="/" element={<Home />} />
             <Route path="/products" element={<Products />} />
+            <Route path="/contact" element={<Contact />} />
             {/* Header and footer link to /product, so send it to /products */}
             <Route path="/product" element={<Navigate to="/products" replace />} />
           </Route>
