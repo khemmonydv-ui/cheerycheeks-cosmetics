@@ -3,6 +3,7 @@ import { Routes, Route, useLocation } from "react-router-dom";
 import MainLayout from "./layouts/MainLayout.jsx";
 import Home from "./pages/Home.jsx";
 import Product from "./pages/Products.jsx";
+import About from "./pages/About.jsx";
 import "./App.css";
 
 // Scroll back to the top whenever the page changes
@@ -23,6 +24,8 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/products" element={<Product />} />
+        <Route path="/about" element={<About />} />
+
       </Routes>
     </MainLayout>
   );
