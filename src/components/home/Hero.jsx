@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { ArrowRight, Leaf, Sparkles, Star } from "lucide-react";
-import skincare from "../../assets/skincare.png";   // two levels up: components/home -> src
+import skincare from "../../assets/ordinary.png";   // two levels up: components/home -> src
 import "./Hero.css";
 
 /**
@@ -62,27 +62,9 @@ export default function Hero({ image = skincare, imageAlt = "Cherry Cheeks skinc
           )}
 
           {/* Floating labels */}
-          <div className="hero__chip hero__chip--top" aria-hidden="true">
-            <span className="hero__chip-icon">
-              <Leaf size={18} strokeWidth={1.75} />
-            </span>
-            <div>
-              <strong>100% natural</strong>
-              <span>Gentle ingredients</span>
-            </div>
-          </div>
-
-          <div className="hero__chip hero__chip--bottom" aria-hidden="true">
-            <span className="hero__chip-icon">
-              <Star size={18} strokeWidth={1.75} fill="currentColor" />
-            </span>
-            <div>
-              <strong>4.9 rating</strong>
-              <span>Loved by customers</span>
-            </div>
           </div>
         </div>
-      </div>
+  
     </section>
   );
 }

@@ -17,7 +17,7 @@ import {
 import Hero from "../components/home/Hero";
 import ProductCard from "../components/product/ProductCard";
 import "./Home.css";
-import heroProduct from "../assets/skincare.png"
+import heroProduct from "../assets/ordinary.png"
 
 /* ======================================================
    PHOTOS
