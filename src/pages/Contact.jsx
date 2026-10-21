@@ -108,7 +108,7 @@ function Contact() {
                     className="contact__field"
                     type="text"
                     name="name"
-                    placeholder="nhakach"
+                    placeholder="Your Name"
                     required
                   />
                 </label>
@@ -161,6 +161,7 @@ function Contact() {
                   className="contact__field contact__textarea"
                   name="message"
                   required
+                  placeholder="Your Message ....."
                 />
               </label>
 
@@ -176,6 +177,17 @@ function Contact() {
               </p>
             </form>
           </div>
+        </div>
+
+        {/* MAP: same width as the contact content */}
+        <div className="contact__map">
+          <iframe
+            title="Our boutique location"
+            src="https://www.google.com/maps?q=Phnom+Penh,+Cambodia&z=15&output=embed"
+            loading="lazy"
+            allowFullScreen
+            referrerPolicy="no-referrer-when-downgrade"
+          />
         </div>
       </div>
     </section>
