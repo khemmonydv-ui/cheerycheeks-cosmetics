@@ -6,6 +6,7 @@ import ProductCard from '../components/product/ProductCard';
 import ProductDetail from '../components/product/ProductDetail';
 import { categories } from '../data/products';
 import { useProducts } from '../context/ProductsContext';
+import { useCart } from '../context/CartContext';
 
 function Product() {
   const [active, setActive] = useState('All');
@@ -14,6 +15,9 @@ function Product() {
 
   // Read the shared list (the same one the admin page edits)
   const { products: allProducts } = useProducts();
+
+  // The shared cart (the same one the header and /cart page read)
+  const { addToCart } = useCart();
 
   // Customers only see products that are not hidden
   const products = allProducts.filter((p) => p.visible);
@@ -27,7 +31,7 @@ function Product() {
   });
 
   const handleAddToCart = (product) => {
-    alert(`${product.name} added to cart`);
+    addToCart(product);
   };
 
   return (
