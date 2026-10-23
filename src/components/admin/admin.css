@@ -31,7 +31,7 @@
   height: 100vh;
 }
 .adm-brand { text-align: center; margin-bottom: 32px; }
-.adm-brand img { max-width: 250px; height: auto; }
+.adm-brand img { max-width: 150px; height: auto; }
 .adm-nav { display: flex; flex-direction: column; gap: 6px; flex: 1; }
 .adm-nav-link {
   padding: 8px 14px;
@@ -233,3 +233,11 @@
   .adm-row { grid-template-columns: 1fr; }
   .adm-modal-actions > * { flex: 1; }
 }
+
+/* ---------- Description box (inside the modal) ---------- */
+.adm-modal textarea {
+  width: 100%; min-height: 96px; padding: 10px 12px; resize: vertical;
+  border: 1px solid var(--adm-border); border-radius: 8px; background: var(--adm-surface);
+  font: inherit; font-size: 15px; line-height: 1.4; color: var(--adm-ink);
+}
+.adm-modal textarea:focus-visible { outline: 0; border-color: var(--adm-primary); box-shadow: 0 0 0 3px rgba(115, 95, 153, 0.18); }
