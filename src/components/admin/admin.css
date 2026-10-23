@@ -241,3 +241,43 @@
   font: inherit; font-size: 15px; line-height: 1.4; color: var(--adm-ink);
 }
 .adm-modal textarea:focus-visible { outline: 0; border-color: var(--adm-primary); box-shadow: 0 0 0 3px rgba(115, 95, 153, 0.18); }
+
+/* ---------- Dashboard ---------- */
+.dash-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+.dash-card {
+  min-width: 0; padding: 20px 20px 22px; background: var(--adm-surface);
+  border: 1px solid var(--adm-border); border-radius: var(--adm-radius);
+}
+.dash-card h2 { margin: 0 0 12px; font-size: 18px; font-weight: 600; }
+.dash-empty { margin: 8px 0 18px; color: var(--adm-muted); font-size: 14px; }
+
+.dash-btn {
+  display: inline-block; padding: 9px 16px; border-radius: 6px;
+  background: var(--adm-primary); color: #fff; font-size: 13px; text-decoration: none;
+}
+.dash-btn:hover { background: var(--adm-primary-dark); }
+.dash-btn:focus-visible { outline: 2px solid var(--adm-primary); outline-offset: 2px; }
+
+.dash-list { list-style: none; margin: 0 0 18px; padding: 0; }
+.dash-list li { display: flex; align-items: center; gap: 14px; padding: 8px 0; border-bottom: 1px solid var(--adm-border); }
+.dash-thumb { width: 42px; height: 42px; flex: none; overflow: hidden; border-radius: 10px; background: #d9b3e0; }
+.dash-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.dash-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 15px; }
+
+.dash-msgs { list-style: none; margin: 0 0 18px; padding: 0; display: flex; flex-direction: column; gap: 18px; }
+.dash-msg-top { display: flex; align-items: baseline; gap: 10px; }
+.dash-new { font-size: 12px; color: #e0568f; }
+.dash-msgs p { margin: 6px 0 0; font-size: 15px; color: #4a4252; }
+
+.dash-cats { display: flex; flex-direction: column; gap: 14px; }
+.dash-cat { display: grid; grid-template-columns: 96px 1fr 44px; align-items: center; gap: 16px; font-size: 15px; }
+.dash-track { height: 10px; overflow: hidden; border-radius: 999px; background: #d3c7cd; }
+.dash-fill { height: 100%; border-radius: 999px; background: var(--adm-primary); transition: width 0.3s ease; }
+.dash-cat-num { text-align: right; color: var(--adm-muted); font-variant-numeric: tabular-nums; }
+
+@media (max-width: 900px) {
+  .dash-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 480px) {
+  .dash-cat { grid-template-columns: 76px 1fr 34px; gap: 10px; }
+}
