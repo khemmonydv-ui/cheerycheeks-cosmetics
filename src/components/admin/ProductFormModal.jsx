@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-const empty = { name: '', category: '', price: '', stock: '', image: '', visible: true };
+const empty = { name: '', category: '', description: '', price: '', stock: '', image: '', visible: true };
 
 const MAX_SIDE = 600; // pictures are shrunk to this size so they stay small when saved
 
@@ -74,6 +74,17 @@ export default function ProductFormModal({ product, onSave, onClose }) {
           </label>
           <label>Category
             <input name="category" value={form.category} onChange={set} required />
+          </label>
+
+          <label>Description
+            <textarea
+              name="description"
+              rows={4}
+              maxLength={500}
+              placeholder="Tell customers what this product is and why they will love it"
+              value={form.description}
+              onChange={set}
+            />
           </label>
   
           <div className="adm-row">

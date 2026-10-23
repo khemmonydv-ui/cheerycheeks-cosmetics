@@ -6,7 +6,7 @@ const ProductsContext = createContext(null);
 const STORAGE_KEY = 'products';
 
 // Give every product a stock count and a visibility flag
-const withDefaults = (p) => ({ stock: 10, visible: true, image: '', ...p });
+const withDefaults = (p) => ({ stock: 10, visible: true, image: '', description: '', reviews: [], ...p });
 
 // Use the saved list from the browser if there is one, otherwise the starting list
 function loadProducts() {
@@ -40,12 +40,22 @@ export function ProductsProvider({ children }) {
   const deleteProduct = (id) =>
     setProducts((prev) => prev.filter((p) => p.id !== id));
 
+  // Saves a customer review on ONE product: { name, rating, text }
+  const addReview = (id, review) =>
+    setProducts((prev) =>
+      prev.map((p) =>
+        p.id === id
+          ? { ...p, reviews: [...(p.reviews ?? []), { ...review, id: Date.now() }] }
+          : p
+      )
+    );
+
   const toggleVisible = (id) =>
     setProducts((prev) => prev.map((p) => (p.id === id ? { ...p, visible: !p.visible } : p)));
 
   return (
     <ProductsContext.Provider
-      value={{ products, addProduct, updateProduct, deleteProduct, toggleVisible }}
+      value={{ products, addProduct, updateProduct, deleteProduct, toggleVisible, addReview }}
     >
       {children}
     </ProductsContext.Provider>
