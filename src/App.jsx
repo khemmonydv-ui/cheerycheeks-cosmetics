@@ -59,7 +59,7 @@ function App() {
             {/* Everything under /admin needs login, and shares the sidebar layout */}
             <Route path="/admin" element={<AdminRoute />}>
               <Route element={<AdminLayout />}>
-                <Route index element={<Navigate to="products" replace />} />
+                <Route index element={<Navigate to="dashboard" replace />} />
                 <Route path="dashboard" element={<AdminDashboard />} />
                 <Route path="products" element={<AdminProducts />} />
                 <Route path="massage" element={<ComingSoon title="Massage" />} />

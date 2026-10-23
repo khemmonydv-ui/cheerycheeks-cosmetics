@@ -31,7 +31,7 @@
   height: 100vh;
 }
 .adm-brand { text-align: center; margin-bottom: 32px; }
-.adm-brand img { max-width: 150px; height: auto; }
+.adm-brand img { max-width: 250px; height: auto; }
 .adm-nav { display: flex; flex-direction: column; gap: 6px; flex: 1; }
 .adm-nav-link {
   padding: 8px 14px;
