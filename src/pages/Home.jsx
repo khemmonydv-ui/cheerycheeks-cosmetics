@@ -14,10 +14,9 @@ import {
   Sparkles,
   Flower2,
 } from "lucide-react";
-import Hero from "../components/home/Hero";
+import Hero from "../components/home/Heroshowcase";
 import ProductCard from "../components/product/ProductCard";
 import "./Home.css";
-import heroProduct from "../assets/ordinary.png"
 
 /* ======================================================
    PHOTOS
@@ -35,12 +34,12 @@ import heroProduct from "../assets/ordinary.png"
 // import journal from "../assets/home/journal.jpg";
 
 const IMAGES = {
-  hero: heroProduct,
-  category: null,
-  about: null,
-  product: null,
-  testimonial: null,
-  journal: null,
+  hero: null, // e.g. hero
+  category: null, // e.g. category
+  about: null, // e.g. about
+  product: null, // e.g. product
+  testimonial: null, // e.g. testimonial
+  journal: null, // e.g. journal
 };
 
 /* ======================================================
@@ -56,9 +55,9 @@ const FEATURES = [
 
 const CATEGORIES = [
   { icon: Droplets, title: "Skincare", text: "Strength & shine", to: "/products?category=skincare" },
-  { icon: Palette, title: "Lips", text: "Color & confidence", to: "/products?category=makeup" },
-  { icon: Sparkles, title: "Face", text: "Soft, healthy hair", to: "/products?category=haircare" },
-  { icon: Flower2, title: "Eyes", text: "Smooth, nourished skin", to: "/products?category=bodycare" },
+  { icon: Palette, title: "Makeup", text: "Color & confidence", to: "/products?category=makeup" },
+  { icon: Sparkles, title: "Haircare", text: "Soft, healthy hair", to: "/products?category=haircare" },
+  { icon: Flower2, title: "Bodycare", text: "Smooth, nourished skin", to: "/products?category=bodycare" },
 ];
 
 const ABOUT_STATS = [

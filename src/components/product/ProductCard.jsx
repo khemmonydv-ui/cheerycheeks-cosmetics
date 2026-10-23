@@ -1,42 +1,58 @@
-import Rating from './Rating';
+import { Star, ShoppingBag, Sparkles } from "lucide-react";
+import "./ProductCard.css";
 
-function ProductCard({ product, onAddToCart, onSelect }) {
-  const { name, category, price, rating, reviews, stock, badge, bg, image } = product;
+/**
+ * One product in a grid.
+ * product = { name, category, price, oldPrice?, rating, tag?, image? }
+ * Without an image it shows a soft placeholder.
+ */
+export default function ProductCard({ product, onAddToCart }) {
+  const { name, category, price, oldPrice, rating, tag, image } = product;
 
   return (
-    // Clicking anywhere on the card opens the detail panel
-    <article className="card" onClick={() => onSelect?.(product)}>
-      <div className="card-image" style={{ background: bg }}>
-        {badge && <span className="badge">{badge}</span>}
-        {image && <img src={image} alt={name} loading="lazy" />}
+    <article className="card product-card">
+      <div className="product-card__media">
+        {tag && <span className="product-card__tag">{tag}</span>}
+
+        {image ? (
+          <img src={image} alt={name} loading="lazy" />
+        ) : (
+          <Sparkles size={48} strokeWidth={1.25} aria-hidden="true" />
+        )}
       </div>
 
-      <div className="card-body">
-        <p className="card-category">{category}</p>
-        <h3 className="card-name">
-          {/* a real button so keyboard users can open it with Enter */}
-          <button type="button" className="card-name-btn">{name}</button>
-        </h3>
-        <Rating value={rating} count={reviews} />
+      <div className="product-card__body">
+        <p className="product-card__category">{category}</p>
+        <h3 className="product-card__name">{name}</h3>
 
-        <p className="card-price">
-          ${Number(price).toFixed(2)}
-          {stock && <span className="card-stock">{stock} Stock</span>}
+        <p className="product-card__rating" aria-label={`Rated ${rating} out of 5`}>
+          {Array.from({ length: 5 }, (_, i) => (
+            <Star
+              key={i}
+              size={15}
+              strokeWidth={1.5}
+              fill={i < Math.round(rating) ? "currentColor" : "none"}
+              aria-hidden="true"
+            />
+          ))}
         </p>
 
-        <button
-          type="button"
-          className="btn-cart"
-          onClick={(e) => {
-            e.stopPropagation(); // don't open the panel when adding to cart
-            onAddToCart?.(product);
-          }}
-        >
-          Add to cart
-        </button>
+        <div className="product-card__footer">
+          <p className="product-card__price">
+            <strong>${price.toFixed(2)}</strong>
+            {oldPrice && <s>${oldPrice.toFixed(2)}</s>}
+          </p>
+
+          <button
+            type="button"
+            className="product-card__add"
+            aria-label={`Add ${name} to cart`}
+            onClick={() => onAddToCart?.(product)}
+          >
+            <ShoppingBag size={20} strokeWidth={1.75} aria-hidden="true" />
+          </button>
+        </div>
       </div>
     </article>
   );
 }
-
-export default ProductCard;
