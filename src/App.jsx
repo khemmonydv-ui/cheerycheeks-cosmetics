@@ -12,6 +12,7 @@ import AdminLogin from "./pages/admin/AdminLogin";
 import ComingSoon from "./pages/admin/Messages.jsx";
 import AdminProducts from "./pages/admin/AdminProducts";
 import "./App.css";
+import AdminSignup from "./pages/admin/AdminSignup.jsx";
 
 // Scroll back to the top whenever the page changes
 function ScrollToTop() {
@@ -52,6 +53,7 @@ function App() {
 
           {/* ---------- Admin (no shop header or footer) ---------- */}
           <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/admin/signup" element={<AdminSignup />} />
 
           {/* Everything under /admin needs login, and shares the sidebar layout */}
           <Route path="/admin" element={<AdminRoute />}>
