@@ -24,3 +24,6 @@ export const ChevronIcon = () => (
 export const LogoutIcon = () => (
   <svg {...base} width="18" height="18"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4" /><path d="M16 17l5-5-5-5M21 12H9" /></svg>
 );
+export const DollarIcon = () => (
+  <svg {...base}><path d="M12 2v20M17 6H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" /></svg>
+);

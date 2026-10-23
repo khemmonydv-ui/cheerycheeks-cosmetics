@@ -11,6 +11,7 @@ import AdminRoute from "./components/admin/AdminRoute";
 import AdminLayout from "./components/admin/AdminLayout";
 import AdminLogin from "./pages/admin/AdminLogin";
 import ComingSoon from "./pages/admin/ComingSoon";
+import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminProducts from "./pages/admin/AdminProducts";
 import "./App.css";
 
@@ -59,7 +60,7 @@ function App() {
             <Route path="/admin" element={<AdminRoute />}>
               <Route element={<AdminLayout />}>
                 <Route index element={<Navigate to="products" replace />} />
-                <Route path="dashboard" element={<ComingSoon title="Dashboard" />} />
+                <Route path="dashboard" element={<AdminDashboard />} />
                 <Route path="products" element={<AdminProducts />} />
                 <Route path="massage" element={<ComingSoon title="Massage" />} />
               </Route>
