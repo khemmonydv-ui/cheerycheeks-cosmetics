@@ -27,7 +27,7 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   width: min(900px, 100%);
-  max-height: 90vh;
+  max-height: 70vh;
   overflow: hidden;
   background: #fff;
   border-radius: 14px;
