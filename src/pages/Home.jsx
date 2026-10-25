@@ -14,7 +14,7 @@ import {
   Sparkles,
   Flower2,
 } from "lucide-react";
-import Hero from "../components/home/Heroshowcase";
+import Hero from "../components/home/HeroShowcase";
 import ProductCard from "../components/product/ProductCard";
 import "./Home.css";
 

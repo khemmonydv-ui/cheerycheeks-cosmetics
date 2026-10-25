@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, Leaf, Sparkles, Star } from "lucide-react";
 import skincare from "../../assets/skincare.png";   // two levels up: components/home -> src
-import "./Heroshowcase.css";
+import "./HeroShowcase.css";
 
 // Little foam bubbles that rise behind the product
 const BUBBLES = [
@@ -35,12 +35,7 @@ export default function HeroShowcase({ image, imageAlt = "Cherry Cheeks skincare
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const touch = window.matchMedia("(pointer: coarse)").matches;
     if (reduce || touch) return undefined;
-     <SectionHead
-            eyebrow="From the journal"
-            title="Tips, trends & insight"
-            to="/blog"
-            linkLabel="View all articles"
-          />
+
     let frame = 0;
 
     const onMove = (e) => {
