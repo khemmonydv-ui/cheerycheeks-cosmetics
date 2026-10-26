@@ -17,7 +17,8 @@ import {
 } from "lucide-react";
 import skincare from "../assets/skincare.png";
 import aboutPhoto from "../assets/about.png";
-import HeroShowcase from "../components/home/HeroShowcase";
+import daraPhoto from "../assets/mony.jpg";
+import HeroShowcase from "../components/home/Heroshowcase";
 import "./Home.css";
 
 /* ======================================================
@@ -41,45 +42,17 @@ const IMAGES = {
 /* ---------- Content: change the text here ---------- */
 
 const FEATURES = [
-  {
-    icon: Leaf,
-    title: "Natural ingredients",
-    text: "Gentle, plant-based formulas",
-  },
+  { icon: Leaf, title: "Natural ingredients", text: "Gentle, plant-based formulas" },
   { icon: Truck, title: "Fast delivery", text: "Quick and safe shipping" },
-  {
-    icon: ShieldCheck,
-    title: "Safe & tested",
-    text: "Dermatologically tested",
-  },
+  { icon: ShieldCheck, title: "Safe & tested", text: "Dermatologically tested" },
   { icon: RotateCcw, title: "Easy returns", text: "7-day return policy" },
 ];
 
 const CATEGORIES = [
-  {
-    icon: Droplets,
-    title: "Skincare",
-    text: "Strength & shine",
-    to: "/products?category=skincare",
-  },
-  {
-    icon: Palette,
-    title: "Makeup",
-    text: "Color & confidence",
-    to: "/products?category=makeup",
-  },
-  {
-    icon: Sparkles,
-    title: "Haircare",
-    text: "Soft, healthy hair",
-    to: "/products?category=haircare",
-  },
-  {
-    icon: Flower2,
-    title: "Bodycare",
-    text: "Smooth, nourished skin",
-    to: "/products?category=bodycare",
-  },
+  { icon: Droplets, title: "Skincare", text: "Strength & shine", to: "/products?category=skincare" },
+  { icon: Palette, title: "Makeup", text: "Color & confidence", to: "/products?category=makeup" },
+  { icon: Sparkles, title: "Haircare", text: "Soft, healthy hair", to: "/products?category=haircare" },
+  { icon: Flower2, title: "Bodycare", text: "Smooth, nourished skin", to: "/products?category=bodycare" },
 ];
 
 const ABOUT_STATS = [
@@ -101,45 +74,11 @@ const ABOUT_STATS = [
    the default product photo is used.
 ---------------------------------------------------- */
 const BEST_SELLERS_DATA = [
-  {
-    id: 1,
-    name: "Foam Cleanser",
-    category: "Skincare",
-    price: 18,
-    rating: 5,
-    tag: "Best",
-  },
-  {
-    id: 2,
-    name: "Glow Boost Serum",
-    category: "Skincare",
-    price: 32,
-    oldPrice: 40,
-    rating: 4,
-    tag: "-20%",
-  },
-  {
-    id: 3,
-    name: "Soft Moisturizer",
-    category: "Skincare",
-    price: 26,
-    rating: 4,
-  },
-  {
-    id: 4,
-    name: "Gentle Toner",
-    category: "Skincare",
-    price: 20,
-    rating: 4,
-    tag: "New",
-  },
-  {
-    id: 5,
-    name: "Daily Sunscreen",
-    category: "Skincare",
-    price: 24,
-    rating: 5,
-  },
+  { id: 1, name: "Foam Cleanser", category: "Skincare", price: 18, rating: 5, tag: "Best" },
+  { id: 2, name: "Glow Boost Serum", category: "Skincare", price: 32, oldPrice: 40, rating: 4, tag: "-20%" },
+  { id: 3, name: "Soft Moisturizer", category: "Skincare", price: 26, rating: 4 },
+  { id: 4, name: "Gentle Toner", category: "Skincare", price: 20, rating: 4, tag: "New" },
+  { id: 5, name: "Daily Sunscreen", category: "Skincare", price: 24, rating: 5 },
 ];
 
 const BEST_SELLERS = BEST_SELLERS_DATA.map((p) => ({
@@ -149,43 +88,28 @@ const BEST_SELLERS = BEST_SELLERS_DATA.map((p) => ({
 
 const TESTIMONIALS = [
   {
-    quote:
-      "Luxurious Swiss skincare designed to nourish, protect, and enhance your natural cheek color.",
+    quote: "Luxurious Swiss skincare designed to nourish, protect, and enhance your natural cheek color.",
     name: "Sarah J.",
   },
   {
-    quote:
-      "My skin feels soft and bright. The serum is now part of my every day routine.",
+    quote: "My skin feels soft and bright. The serum is now part of my every day routine.",
     name: "Dara K.",
+    photo: daraPhoto,
   },
   {
-    quote:
-      "Fast delivery and beautiful packaging. The moisturizer is light and smells lovely.",
+    quote: "Fast delivery and beautiful packaging. The moisturizer is light and smells lovely.",
     name: "Lina P.",
   },
   {
-    quote:
-      "Gentle on my sensitive skin. I have already ordered again for my sister.",
+    quote: "Gentle on my sensitive skin. I have already ordered again for my sister.",
     name: "Maly S.",
   },
 ];
 
 const JOURNAL = [
-  {
-    date: "Oct 10, 2026",
-    title: "5 simple steps to a glowing morning routine",
-    to: "/blog",
-  },
-  {
-    date: "Oct 05, 2026",
-    title: "How to choose the right serum for your skin type",
-    to: "/blog",
-  },
-  {
-    date: "Sep 28, 2026",
-    title: "Why natural ingredients matter for sensitive skin",
-    to: "/blog",
-  },
+  { date: "Oct 10, 2026", title: "5 simple steps to a glowing morning routine", to: "/blog" },
+  { date: "Oct 05, 2026", title: "How to choose the right serum for your skin type", to: "/blog" },
+  { date: "Sep 28, 2026", title: "Why natural ingredients matter for sensitive skin", to: "/blog" },
 ];
 
 /* ======================================================
@@ -211,10 +135,7 @@ function ProductCard({ product }) {
         <p className="product-card__category">{category}</p>
         <h3 className="product-card__name">{name}</h3>
 
-        <p
-          className="product-card__rating"
-          aria-label={`Rated ${rating} out of 5`}
-        >
+        <p className="product-card__rating" aria-label={`Rated ${rating} out of 5`}>
           {Array.from({ length: 5 }, (_, i) => (
             <Star
               key={i}
@@ -232,11 +153,7 @@ function ProductCard({ product }) {
             {oldPrice && <s>${oldPrice.toFixed(2)}</s>}
           </p>
 
-          <button
-            type="button"
-            className="product-card__add"
-            aria-label={`Add ${name} to cart`}
-          >
+          <button type="button" className="product-card__add" aria-label={`Add ${name} to cart`}>
             <ShoppingBag size={20} strokeWidth={1.75} aria-hidden="true" />
           </button>
         </div>
@@ -267,12 +184,14 @@ function SectionHead({ eyebrow, title, to, linkLabel }) {
 function TestimonialSlider() {
   const [index, setIndex] = useState(0);
   const current = TESTIMONIALS[index];
+  // each review can have its own photo; if not, use the default one
+  const photo = current.photo ?? IMAGES.testimonial;
 
   return (
     <div className="home-quote">
       <div className="home-quote__media">
-        {IMAGES.testimonial ? (
-          <img src={IMAGES.testimonial} alt="" loading="lazy" />
+        {photo ? (
+          <img key={index} src={photo} alt="" loading="lazy" />
         ) : (
           <Leaf size={96} strokeWidth={1} aria-hidden="true" />
         )}
@@ -288,7 +207,7 @@ function TestimonialSlider() {
         <div className="home-quote__footer">
           <p className="home-quote__author">
             <span className="home-quote__avatar" aria-hidden="true">
-              {current.name[0]}
+              {current.photo ? <img src={current.photo} alt="" /> : current.name[0]}
             </span>
             {current.name}
           </p>
@@ -380,29 +299,28 @@ function Home() {
       <section className="home-about">
         <div className="container home-about__layout">
           <div className="home-about__inner">
-            <p className="home-about__eyebrow">About Cherry Cheeks</p>
-            <h2 className="home-about__title">
-              Beauty that&apos;s clean.
-              <br />
-              Confidence that&apos;s real.
-            </h2>
-            <p className="home-about__text">
-              Skincare made with gentle, natural ingredients, simple routines
-              and honest advice, so you can feel good in your own skin every
-              day.
-            </p>
+          <p className="home-about__eyebrow">About Cherry Cheeks</p>
+          <h2 className="home-about__title">
+            Beauty that&apos;s clean.
+            <br />
+            Confidence that&apos;s real.
+          </h2>
+          <p className="home-about__text">
+            Skincare made with gentle, natural ingredients, simple routines and
+            honest advice, so you can feel good in your own skin every day.
+          </p>
 
-            <ul className="home-about__stats">
-              {ABOUT_STATS.map(({ value, label }) => (
-                <li key={label}>
-                  <Star size={22} strokeWidth={1.5} aria-hidden="true" />
-                  <div>
-                    <strong>{value}</strong>
-                    <span>{label}</span>
-                  </div>
-                </li>
-              ))}
-            </ul>
+          <ul className="home-about__stats">
+            {ABOUT_STATS.map(({ value, label }) => (
+              <li key={label}>
+                <Star size={22} strokeWidth={1.5} aria-hidden="true" />
+                <div>
+                  <strong>{value}</strong>
+                  <span>{label}</span>
+                </div>
+              </li>
+            ))}
+          </ul>
           </div>
 
           <div className="home-about__media" aria-hidden="true">
