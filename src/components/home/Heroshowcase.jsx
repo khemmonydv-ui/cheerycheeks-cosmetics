@@ -98,9 +98,6 @@ export default function HeroShowcase({ image, imageAlt = "Cherry Cheeks skincare
               Shop Now
               <ArrowRight size={20} strokeWidth={2} aria-hidden="true" />
             </Link>
-            <Link to="/products?category=skincare" className="btn btn-outline btn-lg">
-              Explore Skincare
-            </Link>
           </div>
 
           <div className="showcase__proof showcase__reveal" style={{ "--d": "0.66s" }}>
@@ -142,51 +139,6 @@ export default function HeroShowcase({ image, imageAlt = "Cherry Cheeks skincare
           {/* Product */}
           <div className="showcase__layer showcase__layer--product">
             <img src={src} alt={imageAlt} className="showcase__product" />
-          </div>
-
-          {/* Floating labels */}
-          <div className="showcase__layer showcase__layer--chip-top" aria-hidden="true">
-            <div className="showcase__chip">
-              <span className="showcase__chip-icon">
-                <Leaf size={18} strokeWidth={1.75} />
-              </span>
-              <div>
-                <strong>100% natural</strong>
-                <span>Gentle ingredients</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="showcase__layer showcase__layer--chip-bottom" aria-hidden="true">
-            <div className="showcase__chip showcase__chip--late">
-              <span className="showcase__chip-icon">
-                <Star size={18} strokeWidth={1.75} fill="currentColor" />
-              </span>
-              <div>
-                <strong>4.9 rating</strong>
-                <span>Loved by customers</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Rotating badge */}
-          <div className="showcase__layer showcase__layer--badge" aria-hidden="true">
-            <div className="showcase__badge">
-              <svg viewBox="0 0 100 100">
-                <defs>
-                  <path
-                    id="showcase-circle"
-                    d="M 50,50 m -38,0 a 38,38 0 1,1 76,0 a 38,38 0 1,1 -76,0"
-                  />
-                </defs>
-                <text>
-                  <textPath href="#showcase-circle" textLength="232" lengthAdjust="spacing">
-                    NATURAL • GENTLE • CLEAN •
-                  </textPath>
-                </text>
-              </svg>
-              <Leaf size={22} strokeWidth={1.75} />
-            </div>
           </div>
         </div>
       </div>

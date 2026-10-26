@@ -234,7 +234,7 @@
   max-width: 100%;
   height: clamp(300px, 70vw, 380px);
   object-fit: contain;
-  filter: drop-shadow(0 30px 32px rgba(96, 76, 121, 0.3));
+  filter: var(--img-shadow, drop-shadow(0 16px 20px rgba(96, 76, 121, 0.28)));
   animation:
     showcase-pop 1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.2s both,
     showcase-float 6s ease-in-out 1.2s infinite;

@@ -13,38 +13,38 @@ import {
   Palette,
   Sparkles,
   Flower2,
+  ShoppingBag,
 } from "lucide-react";
+<<<<<<< HEAD
 import Hero from "../components/home/HeroShowcase";
 import ProductCard from "../components/product/ProductCard";
+=======
+import skincare from "../assets/skincare.png";
+import aboutPhoto from "../assets/about.png";
+import daraPhoto from "../assets/mony.jpg";
+import HeroShowcase from "../components/home/Heroshowcase";
+>>>>>>> cdc3fd05e19cd8b2d28b31df8077b43f8cb8a811
 import "./Home.css";
 
 /* ======================================================
-   PHOTOS
-   1. Put your photos in  src/assets/home/
-   2. Uncomment the import lines (use your real file names)
-   3. Put each one into IMAGES below
-   Until then, every section shows a clean placeholder.
+   HOME PAGE: everything lives in this one file.
+   It only needs:  lucide-react, react-router-dom,
+   src/assets/skincare.png  and  ./Home.css
 ====================================================== */
 
-// import hero from "../assets/home/hero.jpg";
-// import category from "../assets/home/category.png";
-// import about from "../assets/home/about.png";
-// import product from "../assets/home/product.png";
-// import testimonial from "../assets/home/testimonial.jpg";
-// import journal from "../assets/home/journal.jpg";
-
+/* ---------- Photos ----------
+   To add more photos: put them in src/assets/, import them
+   like skincare above, then use them here instead of null. */
 const IMAGES = {
-  hero: null, // e.g. hero
-  category: null, // e.g. category
-  about: null, // e.g. about
-  product: null, // e.g. product
-  testimonial: null, // e.g. testimonial
-  journal: null, // e.g. journal
+  hero: skincare,
+  product: skincare,
+  category: null,
+  about: aboutPhoto,
+  testimonial: null,
+  journal: null,
 };
 
-/* ======================================================
-   CONTENT: change the text here
-====================================================== */
+/* ---------- Content: change the text here ---------- */
 
 const FEATURES = [
   { icon: Leaf, title: "Natural ingredients", text: "Gentle, plant-based formulas" },
@@ -67,13 +67,29 @@ const ABOUT_STATS = [
   { value: "100%", label: "Cruelty free" },
 ];
 
-const BEST_SELLERS = [
-  { id: 1, name: "Glow Boost Serum", category: "Skincare", price: 32, rating: 4, image: IMAGES.product },
-  { id: 2, name: "Glow Boost Serum", category: "Skincare", price: 32, rating: 4, image: IMAGES.product },
-  { id: 3, name: "Glow Boost Serum", category: "Skincare", price: 32, rating: 4, image: IMAGES.product },
-  { id: 4, name: "Glow Boost Serum", category: "Skincare", price: 32, rating: 4, image: IMAGES.product },
-  { id: 5, name: "Glow Boost Serum", category: "Skincare", price: 32, rating: 4, image: IMAGES.product },
+/* ----------------------------------------------------
+   BEST SELLERS (static for now)
+   Same shape as a JSON product, so later you only replace
+   this array with your JSON data. Nothing else changes:
+
+     import products from "../data/products.json";
+     const BEST_SELLERS = products.filter((p) => p.bestSeller).slice(0, 5);
+
+   Each product can have its own "image". If it has none,
+   the default product photo is used.
+---------------------------------------------------- */
+const BEST_SELLERS_DATA = [
+  { id: 1, name: "Foam Cleanser", category: "Skincare", price: 18, rating: 5, tag: "Best" },
+  { id: 2, name: "Glow Boost Serum", category: "Skincare", price: 32, oldPrice: 40, rating: 4, tag: "-20%" },
+  { id: 3, name: "Soft Moisturizer", category: "Skincare", price: 26, rating: 4 },
+  { id: 4, name: "Gentle Toner", category: "Skincare", price: 20, rating: 4, tag: "New" },
+  { id: 5, name: "Daily Sunscreen", category: "Skincare", price: 24, rating: 5 },
 ];
+
+const BEST_SELLERS = BEST_SELLERS_DATA.map((p) => ({
+  ...p,
+  image: p.image ?? IMAGES.product,
+}));
 
 const TESTIMONIALS = [
   {
@@ -83,6 +99,7 @@ const TESTIMONIALS = [
   {
     quote: "My skin feels soft and bright. The serum is now part of my every day routine.",
     name: "Dara K.",
+    photo: daraPhoto,
   },
   {
     quote: "Fast delivery and beautiful packaging. The moisturizer is light and smells lovely.",
@@ -103,6 +120,52 @@ const JOURNAL = [
 /* ======================================================
    SMALL COMPONENTS
 ====================================================== */
+
+/* One product in the best sellers grid */
+function ProductCard({ product }) {
+  const { name, category, price, oldPrice, rating, tag, image } = product;
+
+  return (
+    <article className="card product-card">
+      <div className="product-card__media">
+        {tag && <span className="product-card__tag">{tag}</span>}
+        {image ? (
+          <img src={image} alt={name} loading="lazy" />
+        ) : (
+          <Sparkles size={48} strokeWidth={1.25} aria-hidden="true" />
+        )}
+      </div>
+
+      <div className="product-card__body">
+        <p className="product-card__category">{category}</p>
+        <h3 className="product-card__name">{name}</h3>
+
+        <p className="product-card__rating" aria-label={`Rated ${rating} out of 5`}>
+          {Array.from({ length: 5 }, (_, i) => (
+            <Star
+              key={i}
+              size={15}
+              strokeWidth={1.5}
+              fill={i < Math.round(rating) ? "currentColor" : "none"}
+              aria-hidden="true"
+            />
+          ))}
+        </p>
+
+        <div className="product-card__footer">
+          <p className="product-card__price">
+            <strong>${price.toFixed(2)}</strong>
+            {oldPrice && <s>${oldPrice.toFixed(2)}</s>}
+          </p>
+
+          <button type="button" className="product-card__add" aria-label={`Add ${name} to cart`}>
+            <ShoppingBag size={20} strokeWidth={1.75} aria-hidden="true" />
+          </button>
+        </div>
+      </div>
+    </article>
+  );
+}
 
 /* Title row: label + title on the left, "View all" link on the right */
 function SectionHead({ eyebrow, title, to, linkLabel }) {
@@ -126,12 +189,14 @@ function SectionHead({ eyebrow, title, to, linkLabel }) {
 function TestimonialSlider() {
   const [index, setIndex] = useState(0);
   const current = TESTIMONIALS[index];
+  // each review can have its own photo; if not, use the default one
+  const photo = current.photo ?? IMAGES.testimonial;
 
   return (
     <div className="home-quote">
       <div className="home-quote__media">
-        {IMAGES.testimonial ? (
-          <img src={IMAGES.testimonial} alt="" loading="lazy" />
+        {photo ? (
+          <img key={index} src={photo} alt="" loading="lazy" />
         ) : (
           <Leaf size={96} strokeWidth={1} aria-hidden="true" />
         )}
@@ -147,7 +212,7 @@ function TestimonialSlider() {
         <div className="home-quote__footer">
           <p className="home-quote__author">
             <span className="home-quote__avatar" aria-hidden="true">
-              {current.name[0]}
+              {current.photo ? <img src={current.photo} alt="" /> : current.name[0]}
             </span>
             {current.name}
           </p>
@@ -177,7 +242,7 @@ function TestimonialSlider() {
 function Home() {
   return (
     <>
-      <Hero image={IMAGES.hero} />
+      <HeroShowcase image={IMAGES.hero} />
 
       {/* Benefits: floating card that overlaps the hero */}
       <section className="home-features-wrap">
@@ -237,7 +302,8 @@ function Home() {
 
       {/* About band */}
       <section className="home-about">
-        <div className="container home-about__inner">
+        <div className="container home-about__layout">
+          <div className="home-about__inner">
           <p className="home-about__eyebrow">About Cherry Cheeks</p>
           <h2 className="home-about__title">
             Beauty that&apos;s clean.
@@ -260,10 +326,11 @@ function Home() {
               </li>
             ))}
           </ul>
-        </div>
+          </div>
 
-        <div className="home-about__media" aria-hidden="true">
-          {IMAGES.about && <img src={IMAGES.about} alt="" loading="lazy" />}
+          <div className="home-about__media" aria-hidden="true">
+            {IMAGES.about && <img src={IMAGES.about} alt="" loading="lazy" />}
+          </div>
         </div>
       </section>
 
