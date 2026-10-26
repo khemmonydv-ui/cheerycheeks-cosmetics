@@ -5,7 +5,7 @@ import StatCard from '../../components/admin/StatCard';
 import RestockCard from '../../components/admin/dashboard/RestockCard';
 import MessagesCard from '../../components/admin/dashboard/MessagesCard';
 import CategoryStockCard from '../../components/admin/dashboard/CategoryStockCard';
-import { stockState } from '../../components/admin/StockBadge';
+import { stockState } from '../../utils/stock';
 import { BoxIcon, DollarIcon } from '../../components/admin/Icons';
 
 const formatMoney = (n) =>

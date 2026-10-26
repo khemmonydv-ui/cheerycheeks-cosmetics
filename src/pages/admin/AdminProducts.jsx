@@ -5,11 +5,11 @@ import StatCard from '../../components/admin/StatCard';
 import ProductToolbar from '../../components/admin/ProductToolbar';
 import ProductTable from '../../components/admin/ProductTable';
 import ProductFormModal from '../../components/admin/ProductFormModal';
-import { stockState } from '../../components/admin/StockBadge';
+import { stockState } from "../../utils/stock";
 import { BoxIcon, EyeIcon, AlertIcon, BoxOffIcon } from '../../components/admin/Icons';
 
 export default function AdminProducts() {
-  const { products, addProduct, updateProduct, deleteProduct, toggleVisible } = useProducts();
+  const { products, addProduct, updateProduct, deleteProduct, toggleVisible, resetChanges } = useProducts();
 
   const [query, setQuery] = useState('');
   const [category, setCategory] = useState('All');
@@ -39,6 +39,12 @@ export default function AdminProducts() {
     if (window.confirm(`Delete "${p.name}"?`)) deleteProduct(p.id);
   };
 
+  const handleReset = () => {
+    if (window.confirm('Remove all admin changes and reviews, and show products.json again?')) {
+      resetChanges();
+    }
+  };
+
   return (
     <>
       <AdminHeader
@@ -60,6 +66,7 @@ export default function AdminProducts() {
         onCategoryChange={setCategory}
         categories={categories}
         onAdd={() => setModal('new')}
+        onReset={handleReset}
       />
 
       <ProductTable

@@ -36,6 +36,7 @@ export default function CartItem({ item, linePrice, onQty, onRemove }) {
           <button
             type="button"
             onClick={() => onQty(item.id, item.qty + 1)}
+            disabled={item.qty >= item.stock}
             aria-label={`Increase quantity of ${item.name}`}
           >
             <Plus size={14} aria-hidden="true" />

@@ -1,10 +1,4 @@
-export const LOW_STOCK_LIMIT = 10;
-
-export function stockState(stock) {
-  if (stock <= 0) return 'out';
-  if (stock <= LOW_STOCK_LIMIT) return 'low';
-  return 'ok';
-}
+import { stockState } from '../../utils/stock';
 
 export default function StockBadge({ stock }) {
   const state = stockState(stock);

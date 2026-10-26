@@ -182,7 +182,13 @@
   border: 1px solid var(--adm-border); border-radius: 8px;
   background: var(--adm-surface); font: inherit; font-size: 15px; color: var(--adm-ink);
 }
-.adm-modal input:focus-visible { outline: 0; border-color: var(--adm-primary); box-shadow: 0 0 0 3px rgba(115, 95, 153, 0.18); }
+.adm-modal select {
+  width: 100%; min-width: 0; height: 42px; padding: 0 12px;
+  border: 1px solid var(--adm-border); border-radius: 8px;
+  background: var(--adm-surface); font: inherit; font-size: 15px; color: var(--adm-ink);
+}
+.adm-modal input:focus-visible,
+.adm-modal select:focus-visible { outline: 0; border-color: var(--adm-primary); box-shadow: 0 0 0 3px rgba(115, 95, 153, 0.18); }
 .adm-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .adm-modal label.adm-check { flex-direction: row; align-items: center; gap: 8px; color: var(--adm-ink); font-size: 14px; }
 .adm-check input { width: 16px; height: 16px; accent-color: var(--adm-primary); }
