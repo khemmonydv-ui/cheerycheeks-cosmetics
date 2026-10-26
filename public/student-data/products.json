@@ -1,0 +1,14 @@
+[
+  {"id":101,"categoryId":1,"sku":"SK-101","name":"Gentle Face Cleanser","brand":"Cherry Cheeks","price":12.00,"stockQuantity":24,"active":true},
+  {"id":102,"categoryId":1,"sku":"SK-102","name":"Vitamin C Serum","brand":"Cherry Cheeks","price":18.50,"stockQuantity":18,"active":true},
+  {"id":103,"categoryId":1,"sku":"SK-103","name":"Daily Sunscreen SPF 50","brand":"Cherry Cheeks","price":15.00,"stockQuantity":31,"active":true},
+  {"id":104,"categoryId":1,"sku":"SK-104","name":"Hydrating Moisturizer","brand":"Cherry Cheeks","price":14.00,"stockQuantity":20,"active":true},
+  {"id":201,"categoryId":2,"sku":"MU-201","name":"Rose Lip Tint","brand":"Cherry Cheeks","price":9.00,"stockQuantity":40,"active":true},
+  {"id":202,"categoryId":2,"sku":"MU-202","name":"Soft Pink Blush","brand":"Cherry Cheeks","price":11.50,"stockQuantity":16,"active":true},
+  {"id":203,"categoryId":2,"sku":"MU-203","name":"Lightweight Foundation","brand":"Cherry Cheeks","price":22.00,"stockQuantity":12,"active":true},
+  {"id":301,"categoryId":3,"sku":"HC-301","name":"Nourishing Shampoo","brand":"Cherry Cheeks","price":13.50,"stockQuantity":27,"active":true},
+  {"id":302,"categoryId":3,"sku":"HC-302","name":"Smooth Conditioner","brand":"Cherry Cheeks","price":12.50,"stockQuantity":22,"active":true},
+  {"id":401,"categoryId":4,"sku":"FR-401","name":"Bloom Eau de Parfum","brand":"Cherry Cheeks","price":35.00,"stockQuantity":9,"active":true},
+  {"id":501,"categoryId":5,"sku":"BC-501","name":"Shea Body Lotion","brand":"Cherry Cheeks","price":10.00,"stockQuantity":35,"active":true},
+  {"id":502,"categoryId":5,"sku":"BC-502","name":"Citrus Hand Cream","brand":"Cherry Cheeks","price":6.50,"stockQuantity":46,"active":true}
+]

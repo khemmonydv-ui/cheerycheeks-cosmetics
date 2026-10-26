@@ -1,0 +1,7 @@
+[
+  {"id":1,"name":"Skincare","description":"Face care products"},
+  {"id":2,"name":"Makeup","description":"Cosmetics and color products"},
+  {"id":3,"name":"Haircare","description":"Hair washing and treatment"},
+  {"id":4,"name":"Fragrance","description":"Perfumes and body fragrance"},
+  {"id":5,"name":"Body Care","description":"Body and hand care"}
+]
