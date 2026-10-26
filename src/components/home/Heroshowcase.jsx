@@ -1,7 +1,8 @@
 import { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, Leaf, Sparkles, Star } from "lucide-react";
-import skincare from "../../assets/skincare.png"; // two levels up: components/home -> src
+import skincare from "../../assets/skincare.png";   // two levels up: components/home -> src
+import "./Heroshowcase.css";
 
 // Little foam bubbles that rise behind the product
 const BUBBLES = [
@@ -22,10 +23,7 @@ const BUBBLES = [
  * - bubbles, soft blobs and a rotating badge keep it alive
  * Everything stops for people who turned on "reduce motion".
  */
-export default function HeroShowcase({
-  image,
-  imageAlt = "Cherry Cheeks skincare product",
-}) {
+export default function HeroShowcase({ image, imageAlt = "Cherry Cheeks skincare product" }) {
   const sectionRef = useRef(null);
   const src = image ?? skincare;
 
@@ -34,17 +32,10 @@ export default function HeroShowcase({
     const el = sectionRef.current;
     if (!el) return undefined;
 
-    const reduce = window.matchMedia(
-      "(prefers-reduced-motion: reduce)",
-    ).matches;
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const touch = window.matchMedia("(pointer: coarse)").matches;
     if (reduce || touch) return undefined;
-    <SectionHead
-      eyebrow="From the journal"
-      title="Tips, trends & insight"
-      to="/blog"
-      linkLabel="View all articles"
-    />;
+
     let frame = 0;
 
     const onMove = (e) => {
@@ -83,10 +74,7 @@ export default function HeroShowcase({
       <div className="container showcase__inner">
         {/* ---------- Text ---------- */}
         <div className="showcase__content">
-          <p
-            className="showcase__pill showcase__reveal"
-            style={{ "--d": "0s" }}
-          >
+          <p className="showcase__pill showcase__reveal" style={{ "--d": "0s" }}>
             <Sparkles size={16} strokeWidth={2} aria-hidden="true" />
             Natural skincare for everyone
           </p>
@@ -100,34 +88,19 @@ export default function HeroShowcase({
             </span>
           </h1>
 
-          <p
-            className="showcase__text showcase__reveal"
-            style={{ "--d": "0.42s" }}
-          >
+          <p className="showcase__text showcase__reveal" style={{ "--d": "0.42s" }}>
             Gentle, clean beauty and skincare made for your everyday glow.
             Discover products your skin will love.
           </p>
 
-          <div
-            className="showcase__actions showcase__reveal"
-            style={{ "--d": "0.54s" }}
-          >
+          <div className="showcase__actions showcase__reveal" style={{ "--d": "0.54s" }}>
             <Link to="/products" className="btn btn-primary btn-lg">
               Shop Now
               <ArrowRight size={20} strokeWidth={2} aria-hidden="true" />
             </Link>
-            <Link
-              to="/products?category=skincare"
-              className="btn btn-outline btn-lg"
-            >
-              Explore Skincare
-            </Link>
           </div>
 
-          <div
-            className="showcase__proof showcase__reveal"
-            style={{ "--d": "0.66s" }}
-          >
+          <div className="showcase__proof showcase__reveal" style={{ "--d": "0.66s" }}>
             <span className="showcase__stars" aria-hidden="true">
               {Array.from({ length: 5 }, (_, i) => (
                 <Star key={i} size={18} fill="currentColor" strokeWidth={0} />
@@ -142,10 +115,7 @@ export default function HeroShowcase({
         {/* ---------- Visual ---------- */}
         <div className="showcase__visual">
           {/* Big outlined word behind the product */}
-          <div
-            className="showcase__layer showcase__layer--word"
-            aria-hidden="true"
-          >
+          <div className="showcase__layer showcase__layer--word" aria-hidden="true">
             <span className="showcase__word">GLOW</span>
           </div>
 
@@ -169,56 +139,6 @@ export default function HeroShowcase({
           {/* Product */}
           <div className="showcase__layer showcase__layer--product">
             <img src={src} alt={imageAlt} className="showcase__product" />
-          </div>
-
-          {/* Floating labels */}
-          <div
-            className="showcase__layer showcase__layer--chip-top"
-            aria-hidden="true"
-          >
-            <div className="showcase__chip">
-              <span className="showcase__chip-icon">
-                <Leaf size={18} strokeWidth={1.75} />
-              </span>
-              <div>
-                <strong>100% natural</strong>
-                <span>Gentle ingredients</span>
-              </div>
-            </div>
-          </div>
-
-          <div
-            className="showcase__layer showcase__layer--chip-bottom"
-            aria-hidden="true"
-          >
-            <div className="showcase__chip showcase__chip--late">
-              <span className="showcase__chip-icon">
-                <Star size={18} strokeWidth={1.75} fill="currentColor" />
-              </span>
-              <div>
-                <strong>4.9 rating</strong>
-                <span>Loved by customers</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Rotating badge */}
-          <div
-            className="showcase__layer showcase__layer--badge"
-            aria-hidden="true"
-          >
-            <div className="showcase__badge">
-              <svg viewBox="0 0 100 100">
-                <defs>
-                  <path
-                    id="showcase-circle"
-                    d="M 50,50 m -38,0 a 38,38 0 1,1 76,0 a 38,38 0 1,1 -76,0"
-                  />
-                </defs>
-                <text></text>
-              </svg>
-              <Leaf size={22} strokeWidth={1.75} />
-            </div>
           </div>
         </div>
       </div>
