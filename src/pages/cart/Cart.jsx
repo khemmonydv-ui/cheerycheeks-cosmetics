@@ -8,8 +8,8 @@ import PaymentMethod from '../../components/cart/PaymentMethod';
 import { money } from '../../components/cart/money';
 import './Cart.css';
 
-const SHIPPING = 8; // flat shipping, free when the cart is empty
-const TAX_RATE = 0.1;
+const SHIPPING = 2; // flat shipping, free when the cart is empty
+const TAX_RATE = 0.02;
 const PROMOS = { GLOW10: 0.1 }; // code -> discount rate
 const emptyCard = { name: '', number: '', expiry: '', cvv: '' };
 const makeOrderNumber = () => `CC-${Date.now().toString().slice(-6)}`;

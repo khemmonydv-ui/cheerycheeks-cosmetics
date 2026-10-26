@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useProducts } from '../../context/ProductsContext';
 
 const empty = { name: '', category: '', description: '', price: '', stock: '', image: '', visible: true };
 
@@ -31,6 +32,7 @@ function fileToDataUrl(file) {
 
 // product = null  → add mode, product = {...} → edit mode
 export default function ProductFormModal({ product, onSave, onClose }) {
+  const { categories } = useProducts(); // from categories.json
   const [form, setForm] = useState(product ? { ...empty, ...product } : empty);
   const [error, setError] = useState('');
 
@@ -73,7 +75,12 @@ export default function ProductFormModal({ product, onSave, onClose }) {
             <input name="name" value={form.name} onChange={set} required />
           </label>
           <label>Category
-            <input name="category" value={form.category} onChange={set} required />
+            <select name="category" value={form.category} onChange={set} required>
+              <option value="" disabled>Select a category</option>
+              {categories.map((c) => (
+                <option key={c.id} value={c.name}>{c.name}</option>
+              ))}
+            </select>
           </label>
 
           <label>Description

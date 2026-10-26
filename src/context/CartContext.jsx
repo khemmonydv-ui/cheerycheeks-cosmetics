@@ -32,33 +32,46 @@ export function CartProvider({ children }) {
     }
   }, [lines]);
 
-  const addToCart = (product, qty = 1) =>
+  // Returns true if something was added, false if the shelf is already empty
+  // (the cart can never hold more than the product's stock).
+  const addToCart = (product, qty = 1) => {
+    const live = products.find((p) => p.id === product.id);
+    const inCart = lines.find((l) => l.id === product.id)?.qty ?? 0;
+    const room = (live?.stock ?? 0) - inCart;
+    if (room <= 0) return false;
+
+    const add = Math.min(qty, room);
     setLines((prev) => {
       const found = prev.find((l) => l.id === product.id);
       if (found) {
-        return prev.map((l) => (l.id === product.id ? { ...l, qty: l.qty + qty } : l));
+        return prev.map((l) => (l.id === product.id ? { ...l, qty: l.qty + add } : l));
       }
-      return [...prev, { id: product.id, qty }];
+      return [...prev, { id: product.id, qty: add }];
     });
+    return true;
+  };
 
-  const setQty = (id, qty) =>
+  const setQty = (id, qty) => {
+    const max = products.find((p) => p.id === id)?.stock ?? 0;
     setLines((prev) =>
       qty <= 0
         ? prev.filter((l) => l.id !== id)
-        : prev.map((l) => (l.id === id ? { ...l, qty } : l))
+        : prev.map((l) => (l.id === id ? { ...l, qty: Math.min(qty, max) } : l))
     );
+  };
 
   const removeFromCart = (id) => setLines((prev) => prev.filter((l) => l.id !== id));
   const clearCart = () => setLines([]);
 
-  // Join the cart lines with the full product info
-  // (a product deleted in admin simply disappears from the cart)
+  // Join the cart lines with the full product info.
+  // A product deleted in admin, or sold out, simply disappears from the cart,
+  // and a line can never be bigger than the stock that is left.
   const items = useMemo(
     () =>
       lines
         .map((l) => {
           const p = products.find((x) => x.id === l.id);
-          return p ? { ...p, qty: l.qty } : null;
+          return p && p.stock > 0 ? { ...p, qty: Math.min(l.qty, p.stock) } : null;
         })
         .filter(Boolean),
     [lines, products]
