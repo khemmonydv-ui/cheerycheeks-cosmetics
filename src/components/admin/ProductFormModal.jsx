@@ -1,6 +1,7 @@
 import { useState } from 'react';
+import { useProducts } from '../../context/ProductsContext';
 
-const empty = { name: '', category: '', price: '', stock: '', image: '', visible: true };
+const empty = { name: '', category: '', description: '', price: '', stock: '', image: '', visible: true };
 
 const MAX_SIDE = 600; // pictures are shrunk to this size so they stay small when saved
 
@@ -31,6 +32,7 @@ function fileToDataUrl(file) {
 
 // product = null  → add mode, product = {...} → edit mode
 export default function ProductFormModal({ product, onSave, onClose }) {
+  const { categories } = useProducts(); // from categories.json
   const [form, setForm] = useState(product ? { ...empty, ...product } : empty);
   const [error, setError] = useState('');
 
@@ -73,7 +75,23 @@ export default function ProductFormModal({ product, onSave, onClose }) {
             <input name="name" value={form.name} onChange={set} required />
           </label>
           <label>Category
-            <input name="category" value={form.category} onChange={set} required />
+            <select name="category" value={form.category} onChange={set} required>
+              <option value="" disabled>Select a category</option>
+              {categories.map((c) => (
+                <option key={c.id} value={c.name}>{c.name}</option>
+              ))}
+            </select>
+          </label>
+
+          <label>Description
+            <textarea
+              name="description"
+              rows={4}
+              maxLength={500}
+              placeholder="Tell customers what this product is and why they will love it"
+              value={form.description}
+              onChange={set}
+            />
           </label>
   
           <div className="adm-row">

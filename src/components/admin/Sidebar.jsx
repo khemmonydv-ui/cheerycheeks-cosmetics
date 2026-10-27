@@ -8,6 +8,7 @@ const links = [
   { to: '/admin/massage', label: 'Massage' },
 ];
 
+
 export default function Sidebar() {
   const { logout } = useAuth();
   const navigate = useNavigate();
@@ -21,7 +22,7 @@ export default function Sidebar() {
     <aside className="adm-sidebar">
       <div className="adm-brand">
         {/* Put your logo file at public/logo.png */}
-        <img src="/logo.png" alt="Cherry Cheeks" />
+        <img src="/Logo.png" alt="Cherry Cheeks" />
       </div>
 
       <nav className="adm-nav">

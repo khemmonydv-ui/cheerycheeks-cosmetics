@@ -1,7 +1,7 @@
 import { SearchIcon, ChevronIcon } from './Icons';
 
 export default function ProductToolbar({
-  query, onQueryChange, category, onCategoryChange, categories, onAdd,
+  query, onQueryChange, category, onCategoryChange, categories, onAdd, onReset,
 }) {
   return (
     <div className="adm-toolbar">
@@ -23,6 +23,14 @@ export default function ProductToolbar({
         </select>
         <ChevronIcon />
       </label>
+
+      <button
+        className="adm-btn-outline"
+        onClick={onReset}
+        title="Remove every admin change and show products.json again"
+      >
+        Reset to JSON data
+      </button>
 
       <button className="adm-btn-primary" onClick={onAdd}>Add product</button>
     </div>

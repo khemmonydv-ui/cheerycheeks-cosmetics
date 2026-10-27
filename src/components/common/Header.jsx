@@ -13,7 +13,8 @@ const NAV_LINKS = [
 
 const ICON_PROPS = { size: 24, strokeWidth: 1.75, "aria-hidden": true };
 
-export default function Header({ cartCount = 0 }) {
+export default function Header() {
+  const { cartCount } = useCart(); // added: reads the real cart count
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [query, setQuery] = useState("");
