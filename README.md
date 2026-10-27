@@ -17,7 +17,7 @@ If you are developing a production application, we recommend using TypeScript wi
 
 
 
-# Minjuu Cosmetics
+# Cherrys cheeks Cosmetics
 
 A modern, responsive cosmetics website developed using ReactJS,
 Vite, JavaScript, and Docker.
