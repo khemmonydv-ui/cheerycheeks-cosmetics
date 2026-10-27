@@ -1,7 +1,7 @@
 /* ======================================
    SHARED IMAGE STYLE (keeps every picture consistent)
-   - cut-out product pictures: same soft shadow, same padding
-   - photos: same ratio and rounded corners
+- cut-out product pictures: same soft shadow, same padding
+- photos: same ratio and rounded corners
    Change a value here and every image follows.
 ====================================== */
 
@@ -589,15 +589,17 @@
   transform: scale(1.05);
 }
 
-/* Play button on top of the picture */
+/* Play button centered on top of the picture */
 .home-post__play {
   position: absolute;
-  inset: 0;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(180deg, rgba(40, 24, 64, 0) 40%, rgba(40, 24, 64, 0.35));
   cursor: pointer;
+  z-index: 2;
 }
 
 .home-post__play span {

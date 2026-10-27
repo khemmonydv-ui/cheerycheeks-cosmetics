@@ -17,28 +17,23 @@ import {
   Play,
   X,
 } from "lucide-react";
-
-
-import ProductCard from "../components/product/ProductCard";
 import skincare from "../assets/images/skincare.png";
 import aboutPhoto from "../assets/images/about.png";
-// profile
 import MonyPhoto from "../assets/profiles/mony.jpg";
 import NitaPhoto from "../assets/profiles/nita.jpg";
 import KakadaPhoto from "../assets/profiles/kakada.jpg";
 import PanhaPhoto from "../assets/profiles/panha.jpg";
-// img hight light
 import routinePhoto from "../assets/images/routine.jpg";
-import guidPhoto from "../assets/images/guid.jpg"
-import skincarePhoto from "../assets/images/skincare.jpg"
-import HeroShowcase from "../components/home/Heroshowcase";
+import guidPhoto from "../assets/images/guid.jpg";
+import skincarePhoto from "../assets/images/skincare.jpg";
+import HeroShowcase from "../components/home/Heroshowcase"; 
 import "./Home.css";
 
 /* ======================================================
    HOME PAGE: everything lives in this one file.
    It only needs:  lucide-react, react-router-dom,
-   src/assets/skincare.png  and  ./Home.css
-====================================================== */import Hero from "../components/home/Heroshowcase";
+   the image imports above and ./Home.css
+====================================================== */
 
 /* ---------- Photos ----------
    To add more photos: put them in src/assets/, import them
@@ -51,6 +46,7 @@ const IMAGES = {
   testimonial: null,
   journal: null,
 };
+
 /* ---------- Content: change the text here ---------- */
 
 const FEATURES = [
@@ -61,8 +57,7 @@ const FEATURES = [
 ];
 
 const CATEGORIES = [
-
-  { icon: Droplets, title: "Skincare", text: "Strength & shine", to: "/products?category=skincare" },
+  { icon: Droplets, title: "Skincare", text: "Healthy, glowing skin", to: "/products?category=skincare" },
   { icon: Palette, title: "Makeup", text: "Color & confidence", to: "/products?category=makeup" },
   { icon: Sparkles, title: "Haircare", text: "Soft, healthy hair", to: "/products?category=haircare" },
   { icon: Flower2, title: "Bodycare", text: "Smooth, nourished skin", to: "/products?category=bodycare" },
@@ -100,27 +95,24 @@ const BEST_SELLERS = BEST_SELLERS_DATA.map((p) => ({
 }));
 
 const TESTIMONIALS = [
-
   {
-    quote: "My skin feels soft and bright. The serum is now part of my every day routine.",
-    name: "Mony K.",
+    quote: "Luxurious Swiss skincare designed to nourish, protect, and enhance your natural cheek color.",
+    name: "Mony",
     photo: MonyPhoto,
   },
-
   {
-
-    quote: "Luxurious Swiss skincare designed to nourish, protect, and enhance your natural cheek color.",
-    name: "kakada Y.",
-    photo: KakadaPhoto,
-  },
-  {
-    quote: "Fast delivery and beautiful packaging. The moisturizer is light and smells lovely.",
-    name: "Nita C.",
+    quote: "My skin feels soft and bright. The serum is now part of my every day routine.",
+    name: "Nita",
     photo: NitaPhoto,
   },
   {
+    quote: "Fast delivery and beautiful packaging. The moisturizer is light and smells lovely.",
+    name: "Kakada",
+    photo: KakadaPhoto,
+  },
+  {
     quote: "Gentle on my sensitive skin. I have already ordered again for my sister.",
-    name: "Panha H.",
+    name: "Panha",
     photo: PanhaPhoto,
   },
 ];
@@ -362,7 +354,6 @@ function Journal() {
                     <time>{date}</time>
                   </p>
                   <h3>{title}</h3>
-
                 </div>
               </article>
             );
