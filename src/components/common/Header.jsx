@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { Search, User, ShoppingBag, Menu, X } from "lucide-react";
-import logo from "../../assets/Logo.png";
-import { useCart } from "../../context/CartContext"; // added
+import logo from "../../assets/images/Logo.png";
 import "./Header.css";
 
 const NAV_LINKS = [
