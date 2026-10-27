@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import {
   ArrowRight,
@@ -14,23 +14,34 @@ import {
   Sparkles,
   Flower2,
   ShoppingBag,
+  Play,
+  X,
 } from "lucide-react";
-<<<<<<< HEAD
-import Hero from "../components/home/HeroShowcase";
+
+
 import ProductCard from "../components/product/ProductCard";
-=======
+
 import skincare from "../assets/skincare.png";
 import aboutPhoto from "../assets/about.png";
-import daraPhoto from "../assets/mony.jpg";
+import skincare from "../assets/images/skincare.png";
+import aboutPhoto from "../assets/images/about.png";
+// profile
+import MonyPhoto from "../assets/profiles/mony.jpg";
+import NitaPhoto from "../assets/profiles/nita.jpg";
+import KakadaPhoto from "../assets/profiles/kakada.jpg";
+import PanhaPhoto from "../assets/profiles/panha.jpg";
+// img hight light
+import routinePhoto from "../assets/images/routine.jpg";
+import guidPhoto from "../assets/images/guid.jpg"
+import skincarePhoto from "../assets/images/skincare.jpg"
 import HeroShowcase from "../components/home/Heroshowcase";
->>>>>>> cdc3fd05e19cd8b2d28b31df8077b43f8cb8a811
 import "./Home.css";
 
 /* ======================================================
    HOME PAGE: everything lives in this one file.
    It only needs:  lucide-react, react-router-dom,
    src/assets/skincare.png  and  ./Home.css
-====================================================== */
+====================================================== */import Hero from "../components/home/Heroshowcase";
 
 /* ---------- Photos ----------
    To add more photos: put them in src/assets/, import them
@@ -43,7 +54,6 @@ const IMAGES = {
   testimonial: null,
   journal: null,
 };
-
 /* ---------- Content: change the text here ---------- */
 
 const FEATURES = [
@@ -54,6 +64,7 @@ const FEATURES = [
 ];
 
 const CATEGORIES = [
+
   { icon: Droplets, title: "Skincare", text: "Strength & shine", to: "/products?category=skincare" },
   { icon: Palette, title: "Makeup", text: "Color & confidence", to: "/products?category=makeup" },
   { icon: Sparkles, title: "Haircare", text: "Soft, healthy hair", to: "/products?category=haircare" },
@@ -92,29 +103,66 @@ const BEST_SELLERS = BEST_SELLERS_DATA.map((p) => ({
 }));
 
 const TESTIMONIALS = [
-  {
-    quote: "Luxurious Swiss skincare designed to nourish, protect, and enhance your natural cheek color.",
-    name: "Sarah J.",
-  },
+
   {
     quote: "My skin feels soft and bright. The serum is now part of my every day routine.",
-    name: "Dara K.",
-    photo: daraPhoto,
+    name: "Mony K.",
+    photo: MonyPhoto,
+  },
+
+  {
+
+    quote: "Luxurious Swiss skincare designed to nourish, protect, and enhance your natural cheek color.",
+    name: "kakada Y.",
+    photo: KakadaPhoto,
   },
   {
     quote: "Fast delivery and beautiful packaging. The moisturizer is light and smells lovely.",
-    name: "Lina P.",
+    name: "Nita C.",
+    photo: NitaPhoto,
   },
   {
     quote: "Gentle on my sensitive skin. I have already ordered again for my sister.",
-    name: "Maly S.",
+    name: "Panha H.",
+    photo: PanhaPhoto,
   },
 ];
 
+/* ----------------------------------------------------
+   JOURNAL
+   Every article can have:
+     image   : a picture (import it like the other photos)
+     tag     : small label, e.g. "Routine", "Video"
+     video   : a video file in  public/videos/  e.g. "/videos/routine.mp4"
+     youtube : a YouTube video id, e.g. "dQw4w9WgXcQ"
+   If it has a video or youtube, a play button appears on the
+   picture and the video opens in a pop-up. No video = plain card.
+---------------------------------------------------- */
 const JOURNAL = [
-  { date: "Oct 10, 2026", title: "5 simple steps to a glowing morning routine", to: "/blog" },
-  { date: "Oct 05, 2026", title: "How to choose the right serum for your skin type", to: "/blog" },
-  { date: "Sep 28, 2026", title: "Why natural ingredients matter for sensitive skin", to: "/blog" },
+{
+  date: "Oct 10, 2026",
+  title: "5 simple steps to a glowing morning routine",
+  tag: "Routine",
+  image:routinePhoto,
+  video: "/video/routine.mp4",   // your file name
+  youtube: null,
+},
+  {
+    date: "Oct 05, 2026",
+    title: "How to choose the right serum for your skin type",
+    tag: "Guide",
+    image: guidPhoto,
+    video: "/video/guid.mp4",
+    youtube: null,
+  },
+  {
+    date: "Sep 28, 2026",
+    title: "Why natural ingredients matter for sensitive skin",
+    tag: "Skin care",
+    image: skincarePhoto,
+    video: "/video/skincare.mp4",
+    youtube: null,
+  },
 ];
 
 /* ======================================================
@@ -232,6 +280,101 @@ function TestimonialSlider() {
         </div>
       </div>
     </div>
+  );
+}
+
+/* Pop-up video player: closes with the X, a click outside, or Esc */
+function VideoModal({ item, onClose }) {
+  useEffect(() => {
+    const onKey = (e) => e.key === "Escape" && onClose();
+    const previous = document.body.style.overflow;
+    document.addEventListener("keydown", onKey);
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.body.style.overflow = previous;
+    };
+  }, [onClose]);
+
+  return (
+    <div className="video-modal" role="dialog" aria-modal="true" aria-label={item.title} onClick={onClose}>
+      <div className="video-modal__box" onClick={(e) => e.stopPropagation()}>
+        <button type="button" className="video-modal__close" aria-label="Close video" onClick={onClose}>
+          <X size={22} strokeWidth={2} aria-hidden="true" />
+        </button>
+
+        {item.youtube ? (
+          <iframe
+            src={`https://www.youtube-nocookie.com/embed/${item.youtube}?autoplay=1&rel=0`}
+            title={item.title}
+            allow="autoplay; encrypted-media; picture-in-picture"
+            allowFullScreen
+          />
+        ) : (
+          <video src={item.video} poster={item.image ?? undefined} controls autoPlay playsInline />
+        )}
+      </div>
+    </div>
+  );
+}
+
+/* Journal section: cards, with an optional video on each one */
+function Journal() {
+  const [playing, setPlaying] = useState(null);
+
+  return (
+    <section className="section">
+      <div className="container">
+        <SectionHead
+          eyebrow="From the journal"
+          title="Tips, trends & insight"
+        />
+
+        <div className="home-posts">
+          {JOURNAL.map((item) => {
+            const { date, title, to, tag, image } = item;
+            const hasVideo = Boolean(item.video || item.youtube);
+            const picture = image ?? IMAGES.journal;
+
+            return (
+              <article key={title} className="home-post">
+                <div className="home-post__media">
+                  {picture ? (
+                    <img src={picture} alt="" loading="lazy" />
+                  ) : (
+                    <Sparkles size={40} strokeWidth={1.25} aria-hidden="true" />
+                  )}
+
+                  {hasVideo && (
+                    <button
+                      type="button"
+                      className="home-post__play"
+                      aria-label={`Play video: ${title}`}
+                      onClick={() => setPlaying(item)}
+                    >
+                      <span>
+                        <Play size={22} fill="currentColor" strokeWidth={0} aria-hidden="true" />
+                      </span>
+                    </button>
+                  )}
+                </div>
+
+                <div className="home-post__body">
+                  <p className="home-post__meta">
+                    {tag && <span className="home-post__tag">{hasVideo ? `${tag} · Video` : tag}</span>}
+                    <time>{date}</time>
+                  </p>
+                  <h3>{title}</h3>
+
+                </div>
+              </article>
+            );
+          })}
+        </div>
+      </div>
+
+      {playing && <VideoModal item={playing} onClose={() => setPlaying(null)} />}
+    </section>
   );
 }
 
@@ -360,38 +503,7 @@ function Home() {
       </section>
 
       {/* Journal */}
-      <section className="section">
-        <div className="container">
-          <SectionHead
-            eyebrow="From the journal"
-            title="Tips, trends & insight"
-            to="/blog"
-            linkLabel="View all articles"
-          />
-
-          <div className="home-posts">
-            {JOURNAL.map(({ date, title, to }) => (
-              <article key={title} className="home-post">
-                <div className="home-post__media">
-                  {IMAGES.journal ? (
-                    <img src={IMAGES.journal} alt="" loading="lazy" />
-                  ) : (
-                    <Sparkles size={40} strokeWidth={1.25} aria-hidden="true" />
-                  )}
-                </div>
-                <div className="home-post__body">
-                  <time>{date}</time>
-                  <h3>{title}</h3>
-                  <Link to={to} className="home-post__more">
-                    Read more
-                    <ArrowRight size={16} strokeWidth={2} aria-hidden="true" />
-                  </Link>
-                </div>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
+      <Journal />
     </>
   );
 }

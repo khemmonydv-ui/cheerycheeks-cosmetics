@@ -1,8 +1,8 @@
 import { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, Leaf, Sparkles, Star } from "lucide-react";
-import skincare from "../../assets/skincare.png";   // two levels up: components/home -> src
-import "./HeroShowcase.css";
+import skincare from "../../assets/images/skincare.png";   // two levels up: components/home -> src
+import "./Heroshowcase.css";
 
 // Little foam bubbles that rise behind the product
 const BUBBLES = [
@@ -25,13 +25,12 @@ const BUBBLES = [
  */
 export default function HeroShowcase({ image, imageAlt = "Cherry Cheeks skincare product" }) {
   const sectionRef = useRef(null);
-  const src = image ?? skincare;
+  const src = image ?? 
 
   // Mouse parallax: writes --mx and --my (-0.5 to 0.5) on the section
   useEffect(() => {
     const el = sectionRef.current;
     if (!el) return undefined;
-
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const touch = window.matchMedia("(pointer: coarse)").matches;
     if (reduce || touch) return undefined;
