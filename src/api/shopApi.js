@@ -1,9 +1,9 @@
-// Reads the teacher's JSON files from public/student-data/.
+// Reads the teacher's JSON files from public/products-data/.
 // Only the files that have a relationship with the product page are used:
 //   products.json    -> the products (categoryId points to categories.id)
 //   categories.json  -> the category names
 //   invoices.json    -> units sold per product (productId points to products.id)
-const DATA_URL = `${import.meta.env.BASE_URL}student-data`;
+const DATA_URL = `${import.meta.env.BASE_URL}products-data`;
 
 async function getJson(file, signal) {
   const response = await fetch(`${DATA_URL}/${file}.json`, { signal });
