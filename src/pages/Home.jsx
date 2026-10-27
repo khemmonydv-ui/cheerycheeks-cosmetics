@@ -20,9 +20,6 @@ import {
 
 
 import ProductCard from "../components/product/ProductCard";
-
-import skincare from "../assets/skincare.png";
-import aboutPhoto from "../assets/about.png";
 import skincare from "../assets/images/skincare.png";
 import aboutPhoto from "../assets/images/about.png";
 // profile
