@@ -2,17 +2,8 @@ import { useEffect } from "react";
 import { Routes, Route, Navigate, Outlet, useLocation } from "react-router-dom";
 import MainLayout from "./layouts/MainLayout.jsx";
 import Home from "./pages/Home.jsx";
-import Products from "./pages/Products.jsx";
-import Cart from "./pages/cart/Cart";
-import { CartProvider } from "./context/CartContext";
-import { ProductsProvider } from "./context/ProductsContext";
-import { AuthProvider } from "./context/AuthContext";
-import AdminRoute from "./components/admin/AdminRoute";
-import AdminLayout from "./components/admin/AdminLayout";
-import AdminLogin from "./pages/admin/AdminLogin";
-import ComingSoon from "./pages/admin/ComingSoon";
-import AdminDashboard from "./pages/admin/AdminDashboard";
-import AdminProducts from "./pages/admin/AdminProducts";
+import Product from "./pages/Products.jsx";
+import About from "./pages/About.jsx";
 import "./App.css";
 
 // Scroll back to the top whenever the page changes
@@ -32,7 +23,12 @@ function PublicLayout() {
   return (
     <MainLayout>
       <ScrollToTop />
-      <Outlet />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/products" element={<Product />} />
+        <Route path="/about" element={<About />} />
+
+      </Routes>
     </MainLayout>
   );
 }
