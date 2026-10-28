@@ -30,6 +30,7 @@ import skincarePhoto from "../assets/images/skincare.jpg";
 import HeroShowcase from "../components/home/Heroshowcase"; 
 import "./Home.css";
 
+
 /* ======================================================
    HOME PAGE: everything lives in this one file.
    It only needs:  lucide-react, react-router-dom,
