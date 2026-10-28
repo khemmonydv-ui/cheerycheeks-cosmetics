@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect, useMemo } from 'react';
 import { useProducts } from './ProductsContext';
+import { getCurrentUser } from '../utils/session';
 
 const CartContext = createContext(null);
 const STORAGE_KEY = 'cart';
@@ -35,6 +36,7 @@ export function CartProvider({ children }) {
   // Returns true if something was added, false if the shelf is already empty
   // (the cart can never hold more than the product's stock).
   const addToCart = (product, qty = 1) => {
+    if (!getCurrentUser()) return false; // only people with an account can shop
     const live = products.find((p) => p.id === product.id);
     const inCart = lines.find((l) => l.id === product.id)?.qty ?? 0;
     const room = (live?.stock ?? 0) - inCart;

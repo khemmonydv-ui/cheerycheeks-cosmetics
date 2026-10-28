@@ -1,10 +1,14 @@
 import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { getAccounts } from '../api/accounts'
 import './Signup.css'
 
 export default function Login() {
   const navigate = useNavigate()
+  const location = useLocation()
+  // Set by the "please log in" alert: the page to return to, and a message to show
+  const backTo = location.state?.from ?? '/account'
+  const notice = location.state?.notice
   const [form, setForm] = useState({ email: '', password: '' })
   const [error, setError] = useState('')
 
@@ -33,7 +37,7 @@ export default function Login() {
       }
 
       localStorage.setItem('currentUser', JSON.stringify(user))
-      navigate('/account')
+      navigate(backTo, { replace: true })
     } catch (err) {
       console.error(err)
       setError('Cannot load accounts. Please try again.')
@@ -62,12 +66,13 @@ export default function Login() {
               autoComplete="current-password" value={form.password} onChange={handleChange} required />
           </div>
 
+          {notice && <p className="signup-notice">{notice}</p>}
           {error && <p className="signup-error" role="alert">{error}</p>}
 
           <button type="submit" className="btn btn-primary btn-block">Log in</button>
 
           <p className="signup-switch">
-            No account? <Link to="/signup">Sign up</Link>
+            No account? <Link to="/signup" state={location.state}>Sign up</Link>
           </p>
         </form>
       </div>

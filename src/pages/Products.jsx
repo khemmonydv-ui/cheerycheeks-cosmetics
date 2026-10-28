@@ -1,11 +1,14 @@
 // src/pages/Products.jsx
 import { useState, useCallback, useEffect, useRef } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import SearchBar from '../components/product/SearchBar';
 import FilterTabs from '../components/product/FilterTabs';
 import SortSelect from '../components/product/SortSelect';
 import ProductCard from '../components/product/ProductCard';
 import ProductDetail from '../components/product/ProductDetail';
+import LoginPrompt from '../components/common/LoginPrompt';
 import { sortProducts } from '../utils/sortProducts';
+import { getCurrentUser } from '../utils/session';
 import { useProducts } from '../context/ProductsContext';
 import { useCart } from '../context/CartContext';
 
@@ -33,7 +36,11 @@ function Product() {
   const [sort, setSort] = useState('featured');
   const [selectedId, setSelectedId] = useState(null); // the product being viewed
   const [notice, setNotice] = useState('');
+  const [promptFor, setPromptFor] = useState(''); // product name while the "please log in" alert is open
   const noticeTimer = useRef(null);
+
+  const navigate = useNavigate();
+  const location = useLocation();
 
   // The shared list from products.json (the same one the admin page edits)
   const { products: allProducts, categories, status, error, reload, addReview } = useProducts();
@@ -70,10 +77,28 @@ function Product() {
   useEffect(() => () => clearTimeout(noticeTimer.current), []);
 
   const handleAddToCart = (product) => {
+    // No account yet: show the alert instead of adding
+    if (!getCurrentUser()) {
+      setPromptFor(product.name);
+      return;
+    }
     if (!addToCart(product)) return;
     setNotice(`${product.name} added to your cart`);
     clearTimeout(noticeTimer.current);
     noticeTimer.current = setTimeout(() => setNotice(''), 2200);
+  };
+
+  const closePrompt = useCallback(() => setPromptFor(''), []);
+
+  // Go to /login or /signup, and come back to this page afterwards
+  const goTo = (path) => {
+    setPromptFor('');
+    navigate(path, {
+      state: {
+        from: location.pathname + location.search,
+        notice: 'Please log in or create an account to add products to your cart.',
+      },
+    });
   };
 
   const clearFilters = () => {
@@ -139,6 +164,15 @@ function Product() {
           onClose={closeDetail}
           onAddToCart={handleAddToCart}
           onAddReview={addReview}
+        />
+      )}
+
+      {promptFor && (
+        <LoginPrompt
+          productName={promptFor}
+          onLogin={() => goTo('/login')}
+          onSignup={() => goTo('/signup')}
+          onClose={closePrompt}
         />
       )}
 
