@@ -1,0 +1,52 @@
+.prompt-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 400; /* above the product panel and the header */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: rgba(24, 14, 32, 0.6);
+}
+
+.prompt {
+  width: 100%;
+  max-width: 380px;
+  padding: 28px 24px 22px;
+  text-align: center;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 12px 40px rgba(24, 14, 32, 0.3);
+}
+
+.prompt-title { margin: 0 0 8px; font-size: 18px; font-weight: 600; color: #000; }
+.prompt-text  { margin: 0 0 22px; font-size: 14px; line-height: 1.5; color: #5d5468; }
+
+.prompt-actions { display: flex; flex-direction: column; gap: 10px; }
+
+.prompt-btn {
+  padding: 12px 18px;
+  font: inherit;
+  font-size: 13px;
+  color: #725e8b;
+  background: #fff;
+  border: 1px solid #cdbfdb;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.prompt-btn-main { color: #fff; background: #725e8b; border-color: #725e8b; }
+.prompt-btn-main:hover { background: #604c79; }
+
+.prompt-link {
+  padding: 6px;
+  font: inherit;
+  font-size: 12px;
+  color: #8a809a;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+.prompt-btn:focus-visible,
+.prompt-link:focus-visible { outline: 2px solid #725e8b; outline-offset: 2px; }

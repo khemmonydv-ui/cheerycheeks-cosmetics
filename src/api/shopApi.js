@@ -43,3 +43,6 @@ export function countSold(invoices) {
   }
   return sold;
 }
+
+// All invoices (used by "My orders" on the Account page).
+export const loadInvoices = (signal) => getJson('invoices', signal);
