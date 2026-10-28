@@ -5,12 +5,13 @@ import Home from "./pages/Home.jsx";
 import Products from "./pages/Products.jsx";
 import Cart from "./pages/cart/Cart";
 import { CartProvider } from "./context/CartContext";
+import Contact from "./pages/Contact.jsx";
 import { ProductsProvider } from "./context/ProductsContext";
 import { AuthProvider } from "./context/AuthContext";
 import AdminRoute from "./components/admin/AdminRoute";
 import AdminLayout from "./components/admin/AdminLayout";
 import AdminLogin from "./pages/admin/AdminLogin";
-import ComingSoon from "./pages/admin/ComingSoon";
+import Messages from "./pages/admin/Messages.jsx";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminProducts from "./pages/admin/AdminProducts";
 import "./App.css";
@@ -49,6 +50,7 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/products" element={<Products />} />
               <Route path="/cart" element={<Cart />} />
+              <Route path="/contact" element={<Contact />} />
               {/* Header and footer link to /product, so send it to /products */}
               <Route path="/product" element={<Navigate to="/products" replace />} />
             </Route>
@@ -62,7 +64,7 @@ function App() {
                 <Route index element={<Navigate to="dashboard" replace />} />
                 <Route path="dashboard" element={<AdminDashboard />} />
                 <Route path="products" element={<AdminProducts />} />
-                <Route path="massage" element={<ComingSoon title="Massage" />} />
+                <Route path="massage" element={<Messages />} />
               </Route>
             </Route>
           </Routes>
