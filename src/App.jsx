@@ -6,6 +6,7 @@ import Product from "./pages/Products.jsx";
 import About from "./pages/About.jsx";
 import Account from "./pages/Account.jsx";
 import Login from "./pages/Login.jsx";
+
 import Signup from "./pages/Signup.jsx";
 import "./App.css";
 
@@ -46,6 +47,7 @@ function App() {
       <ScrollToTop />
       <Routes>
         <Route path="/" element={<Home />} />
+          <Route path="/home" element={<Home />} />
         <Route path="/products" element={<Product />} />
         <Route path="/about" element={<About />} />
         <Route path="/account" element={<Account />} />
