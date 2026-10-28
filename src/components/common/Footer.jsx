@@ -7,6 +7,7 @@ import {
   Send,
   ArrowUp,
   LoaderCircle,
+  
 } from "lucide-react";
 import "./Footer.css";
 

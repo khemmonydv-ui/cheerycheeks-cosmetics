@@ -1,15 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Star, X } from 'lucide-react';
+import { money } from '../cart/money';
+import { stockState } from '../../utils/stock';
 import './ProductDetail.css';
-
-// Used when a product in products.js has no "reviewList" of its own
-const sampleReviews = [
-  { id: 1, name: 'Kakada', rating: 5, text: 'Nice texture and scent. Good value.' },
-  { id: 2, name: 'Panha', rating: 5, text: 'Absorbs fast and leaves my skin glowing. Love it!' },
-];
-
-const defaultDescription =
-  'A weightless, buildable tint with a soft-matte velvet finish and 8-hour comfort.';
 
 // Row of 5 stars. "value" = how many are filled.
 function Stars({ value, size = 8 }) {
@@ -28,13 +21,24 @@ function Stars({ value, size = 8 }) {
   );
 }
 
-function ProductDetail({ product, onClose, onAddToCart }) {
-  const { name, price, rating, bg, image, description } = product;
+function stockText(stock) {
+  const state = stockState(stock);
+  if (state === 'out') return 'Sold out';
+  if (state === 'low') return `Only ${stock} left`;
+  return `${stock} in stock`;
+}
 
-  const [reviews, setReviews] = useState(product.reviewList ?? sampleReviews);
+// product = the live product from ProductsContext, so new reviews, price and
+// stock changes show up here straight away.
+function ProductDetail({ product, inCart = 0, onClose, onAddToCart, onAddReview }) {
+  const { id, name, brand, sku, category, price, stock, sold, rating, reviewCount, reviews, bg, image, description } = product;
+
   const [newRating, setNewRating] = useState(5);
   const [author, setAuthor] = useState('');
   const [text, setText] = useState('');
+
+  const state = stockState(stock);
+  const allInCart = state !== 'out' && inCart >= stock;
 
   // Close with the Escape key, and stop the page behind from scrolling
   useEffect(() => {
@@ -53,14 +57,16 @@ function ProductDetail({ product, onClose, onAddToCart }) {
     e.preventDefault();
     if (!author.trim() || !text.trim()) return;
 
-    setReviews([
-      ...reviews,
-      { id: Date.now(), name: author.trim(), rating: newRating, text: text.trim() },
-    ]);
+    // Saved in ProductsContext, so the review stays after the panel is closed
+    onAddReview(id, { name: author.trim(), rating: newRating, text: text.trim() });
     setAuthor('');
     setText('');
     setNewRating(5);
   };
+
+  let addText = 'Add to cart';
+  if (state === 'out') addText = 'Sold out';
+  else if (allInCart) addText = 'All in your cart';
 
   return (
     <div className="overlay" onClick={onClose}>
@@ -73,37 +79,64 @@ function ProductDetail({ product, onClose, onAddToCart }) {
       >
         {/* Left: product picture */}
         <div className="detail-media" style={{ background: bg }}>
-          <img src={image} alt={name} />
+          {image && <img src={image} alt={name} />}
         </div>
 
         {/* Right: information */}
         <div className="detail-info">
           <div className="detail-top">
-            <Stars value={Math.round(rating)} size={12} />
+            <p className="detail-category">{category}</p>
             <button className="detail-close" onClick={onClose} aria-label="Close">
               <X size={22} />
             </button>
           </div>
 
-          <p className="detail-desc">{description ?? defaultDescription}</p>
-          <p className="detail-price">${price}</p>
+          <h2 className="detail-name">{name}</h2>
+          <p className="detail-meta">
+            {[brand, sku && `SKU ${sku}`].filter(Boolean).join(' · ')}
+          </p>
 
-          <button className="detail-add" onClick={() => onAddToCart(product)}>
-            Add to cart
+          <p className="detail-rating">
+            <Stars value={Math.round(rating)} size={12} />
+            <span>
+              {reviewCount > 0
+                ? `${rating} · ${reviewCount} ${reviewCount === 1 ? 'review' : 'reviews'}`
+                : 'No reviews yet'}
+            </span>
+          </p>
+
+          <p className="detail-desc">{description}</p>
+          <p className="detail-price">{money(price)}</p>
+
+          <p className={`detail-stock is-${state}`}>
+            {stockText(stock)}
+            {sold > 0 && <span className="detail-sold"> · {sold} sold</span>}
+          </p>
+
+          <button
+            className="detail-add"
+            disabled={state === 'out' || allInCart}
+            onClick={() => onAddToCart(product)}
+          >
+            {addText}
           </button>
 
           <h3 className="detail-heading">Customer reviews</h3>
-          <ul className="review-list">
-            {reviews.map((r) => (
-              <li key={r.id} className="review">
-                <p className="review-head">
-                  <strong>{r.name}</strong>
-                  <Stars value={r.rating} size={11} />
-                </p>
-                <p className="review-text">{r.text}</p>
-              </li>
-            ))}
-          </ul>
+          {reviews.length === 0 ? (
+            <p className="review-empty">Be the first to review this product.</p>
+          ) : (
+            <ul className="review-list">
+              {reviews.map((r) => (
+                <li key={r.id} className="review">
+                  <p className="review-head">
+                    <strong>{r.name}</strong>
+                    <Stars value={r.rating} size={11} />
+                  </p>
+                  <p className="review-text">{r.text}</p>
+                </li>
+              ))}
+            </ul>
+          )}
 
           <form className="review-form" onSubmit={handleSubmit}>
             <p className="review-label">Write a review</p>
