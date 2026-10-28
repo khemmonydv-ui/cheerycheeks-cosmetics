@@ -11,6 +11,7 @@ import { AuthProvider } from "./context/AuthContext";
 import AdminRoute from "./components/admin/AdminRoute";
 import AdminLayout from "./components/admin/AdminLayout";
 import AdminLogin from "./pages/admin/AdminLogin";
+import AdminSignup from "./pages/admin/AdminSignup";
 import Messages from "./pages/admin/Messages.jsx";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminProducts from "./pages/admin/AdminProducts";
@@ -57,11 +58,12 @@ function App() {
 
             {/* ---------- Admin (no shop header or footer) ---------- */}
             <Route path="/admin/login" element={<AdminLogin />} />
+            <Route path="/admin/signup" element={<AdminSignup />} />
 
             {/* Everything under /admin needs login, and shares the sidebar layout */}
             <Route path="/admin" element={<AdminRoute />}>
               <Route element={<AdminLayout />}>
-                <Route index element={<Navigate to="dashboard" replace />} />
+                <Route index element={<Navigate to="products" replace />} />
                 <Route path="dashboard" element={<AdminDashboard />} />
                 <Route path="products" element={<AdminProducts />} />
                 <Route path="massage" element={<Messages />} />
