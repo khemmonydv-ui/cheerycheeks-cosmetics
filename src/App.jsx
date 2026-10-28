@@ -17,6 +17,7 @@ import AdminProducts from "./pages/admin/AdminProducts";
 import Product from "./pages/Products.jsx";
 import About from "./pages/About.jsx";
 import Account from "./pages/Account.jsx";
+import Contact from "./pages/Contact.jsx";
 import Login from "./pages/Login.jsx";
 import Signup from "./pages/Signup.jsx";
 import "./App.css";
@@ -33,7 +34,7 @@ function ScrollToTop() {
   }, [pathname]);
 
   return null;
-}
+} 
 
 function App() {
   const { pathname } = useLocation();
@@ -61,6 +62,7 @@ function App() {
         <Route part="/about" element={<About />} />
         <Route path="/products" element={<Product />} />
         <Route path="/contact" element={<Contact />} />
+        <Route part="/account" element={<Account />} />
 
       </Routes>
     </MainLayout>
