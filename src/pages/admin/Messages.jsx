@@ -5,16 +5,17 @@ import "./Messages.css";
 // ---------- Frontend-only storage (browser localStorage, no backend) ----------
 const STORAGE_KEY = "cherrycheeks_messages";
 
-const SEED = [
-  {
-    id: 1,
-    name: "Sokha Chen",
-    email: "sokhachen@gmail.com",
-    text: "Is the Rose Glow Serum suitable for sensitive skin?",
-    createdAt: new Date().toISOString(),
-    read: false,
-  },
-];
+//----It Just Example To Call Message From Contact-Page----//->
+// const SEED = [
+//   {
+//     id: 1,
+//     name: "Sokha Chen",
+//     email: "sokhachen@gmail.com",
+//     text: "Is the Rose Glow Serum suitable for sensitive skin?",
+//     createdAt: new Date().toISOString(),
+//     read: false,
+//   },
+// ];
 
 function getMessages() {
   try {
