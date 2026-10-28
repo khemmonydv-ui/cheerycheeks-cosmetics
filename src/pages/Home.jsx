@@ -20,6 +20,7 @@ import {
 import skincare from "../assets/images/skincare.png";
 import aboutPhoto from "../assets/images/about.png";
 import MonyPhoto from "../assets/profiles/mony.jpg";
+import SongPhoto from "../assets/profiles/song.jpeg";
 import NitaPhoto from "../assets/profiles/nita.jpg";
 import KakadaPhoto from "../assets/profiles/kakada.jpg";
 import PanhaPhoto from "../assets/profiles/panha.jpg";
@@ -48,6 +49,7 @@ const IMAGES = {
 };
 
 /* ---------- Content: change the text here ---------- */
+
 
 const FEATURES = [
   { icon: Leaf, title: "Natural ingredients", text: "Gentle, plant-based formulas" },
@@ -95,6 +97,13 @@ const BEST_SELLERS = BEST_SELLERS_DATA.map((p) => ({
 }));
 
 const TESTIMONIALS = [
+
+    {
+    quote: "Luxurious Swiss skincare designed to nourish, protect, and enhance your natural cheek color.",
+    name: "Song",
+    photo: SongPhoto,
+  },
+
   {
     quote: "Luxurious Swiss skincare designed to nourish, protect, and enhance your natural cheek color.",
     name: "Mony",
