@@ -16,8 +16,13 @@ import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminProducts from "./pages/admin/AdminProducts";
 import Product from "./pages/Products.jsx";
 import About from "./pages/About.jsx";
-import Contact from "./pages/Contact.jsx";
+import Account from "./pages/Account.jsx";
+import Login from "./pages/Login.jsx";
+import Signup from "./pages/Signup.jsx";
 import "./App.css";
+
+// Pages that should show without the header and footer
+const NO_LAYOUT_PATHS = ["/login", "/signup"];
 
 // Scroll back to the top whenever the page changes
 function ScrollToTop() {
@@ -30,9 +35,24 @@ function ScrollToTop() {
   return null;
 }
 
-// Shop pages: header + page + footer.
-// <Outlet /> is where the matching child route is shown.
-function PublicLayout() {
+function App() {
+  const { pathname } = useLocation();
+  const hideLayout = NO_LAYOUT_PATHS.includes(pathname);
+
+  // Login and sign up: no header, no footer
+  if (hideLayout) {
+    return (
+      <>
+        <ScrollToTop />
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+        </Routes>
+      </>
+    );
+  }
+
+  // All other pages: with header and footer
   return (
     <MainLayout>
       <ScrollToTop />

@@ -1,0 +1,9 @@
+[
+  {"id":1,"fullName":"Avery Admin","email":"avery@example.com","role":"ADMIN","active":true},
+  {"id":2,"fullName":"Mina Cashier","email":"mina@example.com","role":"CASHIER","active":true},
+  {"id":3,"fullName":"Leo Cashier","email":"leo@example.com","role":"CASHIER","active":true},
+  {"id":101,"fullName":"Nora Customer","email":"nora@example.com","role":"CUSTOMER","active":true},
+  {"id":102,"fullName":"Sam Customer","email":"sam@example.com","role":"CUSTOMER","active":true},
+  {"id":103,"fullName":"Rin Customer","email":"rin@example.com","role":"CUSTOMER","active":true},
+  {"id":104,"fullName":"Kai Customer","email":"kai@example.com","role":"CUSTOMER","active":true}
+]
