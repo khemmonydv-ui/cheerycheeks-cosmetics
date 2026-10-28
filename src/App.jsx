@@ -3,6 +3,11 @@ import { Routes, Route, Navigate, Outlet, useLocation } from "react-router-dom";
 import MainLayout from "./layouts/MainLayout.jsx";
 import Home from "./pages/Home.jsx";
 import Products from "./pages/Products.jsx";
+import About from "./pages/About.jsx";
+import Contact from "./pages/Contact.jsx";
+import Account from "./pages/Account.jsx";
+import Login from "./pages/Login.jsx";
+import Signup from "./pages/Signup.jsx";
 import Cart from "./pages/cart/Cart";
 import { CartProvider } from "./context/CartContext";
 import { ProductsProvider } from "./context/ProductsContext";
@@ -11,19 +16,10 @@ import AdminRoute from "./components/admin/AdminRoute";
 import AdminLayout from "./components/admin/AdminLayout";
 import AdminLogin from "./pages/admin/AdminLogin";
 import AdminSignup from "./pages/admin/AdminSignup";
-import Messages from "./pages/admin/Messages.jsx";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminProducts from "./pages/admin/AdminProducts";
-import Product from "./pages/Products.jsx";
-import About from "./pages/About.jsx";
-import Account from "./pages/Account.jsx";
-import Contact from "./pages/Contact.jsx";
-import Login from "./pages/Login.jsx";
-import Signup from "./pages/Signup.jsx";
+import Messages from "./pages/admin/Messages.jsx";
 import "./App.css";
-
-// Pages that should show without the header and footer
-const NO_LAYOUT_PATHS = ["/login", "/signup"];
 
 // Scroll back to the top whenever the page changes
 function ScrollToTop() {
@@ -34,37 +30,13 @@ function ScrollToTop() {
   }, [pathname]);
 
   return null;
-} 
+}
 
-function App() {
-  const { pathname } = useLocation();
-  const hideLayout = NO_LAYOUT_PATHS.includes(pathname);
-
-  // Login and sign up: no header, no footer
-  if (hideLayout) {
-    return (
-      <>
-        <ScrollToTop />
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-        </Routes>
-      </>
-    );
-  }
-
-  // All other pages: with header and footer
+// Shop pages: header + footer around the page
+function PublicLayout() {
   return (
     <MainLayout>
-      <ScrollToTop />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route part="/about" element={<About />} />
-        <Route path="/products" element={<Product />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route part="/account" element={<Account />} />
-
-      </Routes>
+      <Outlet />
     </MainLayout>
   );
 }
@@ -75,13 +47,21 @@ function App() {
     <AuthProvider>
       <ProductsProvider>
         <CartProvider>
+          <ScrollToTop />
+
           <Routes>
+            {/* ---------- Login and sign up (no header, no footer) ---------- */}
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+
             {/* ---------- Shop (has header and footer) ---------- */}
             <Route element={<PublicLayout />}>
               <Route path="/" element={<Home />} />
+              <Route path="/about" element={<About />} />
               <Route path="/products" element={<Products />} />
-              <Route path="/cart" element={<Cart />} />
               <Route path="/contact" element={<Contact />} />
+              <Route path="/cart" element={<Cart />} />
+              <Route path="/account" element={<Account />} />
               {/* Header and footer link to /product, so send it to /products */}
               <Route path="/product" element={<Navigate to="/products" replace />} />
             </Route>
