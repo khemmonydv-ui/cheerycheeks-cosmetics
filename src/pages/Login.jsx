@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import accountsData from '../data/accounts.json'
+import { getAccounts } from '../api/accounts'
 import './Signup.css'
 
 export default function Login() {
@@ -12,26 +12,32 @@ export default function Login() {
     setForm({ ...form, [e.target.id]: e.target.value })
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault()
 
-    const saved = JSON.parse(localStorage.getItem('accounts')) || []
-    const all = [...accountsData, ...saved]
+    try {
+      const accountsData = await getAccounts()
+      const saved = JSON.parse(localStorage.getItem('accounts')) || []
+      const all = [...accountsData, ...saved]
 
-    const user = all.find(
-      (a) =>
-        a.email === form.email &&
-      // Account from JSON without password → Accept via email only
-        (a.password === undefined || a.password === form.password)
-    )
+      const user = all.find(
+        (a) =>
+          a.email === form.email &&
+          // Account from JSON without password → Accept via email only
+          (a.password === undefined || a.password === form.password)
+      )
 
-    if (!user) {
-      setError('Email or password is incorrect.')
-      return
+      if (!user) {
+        setError('Email or password is incorrect.')
+        return
+      }
+
+      localStorage.setItem('currentUser', JSON.stringify(user))
+      navigate('/account')
+    } catch (err) {
+      console.error(err)
+      setError('Cannot load accounts. Please try again.')
     }
-
-    localStorage.setItem('currentUser', JSON.stringify(user))
-    navigate('/account')
   }
 
   return (

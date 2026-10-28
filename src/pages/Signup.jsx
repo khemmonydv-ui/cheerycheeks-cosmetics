@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import accountsData from '../data/accounts.json'
+import { getAccounts } from '../api/accounts'
 import './Signup.css'
 
 export default function Signup() {
@@ -18,7 +18,7 @@ export default function Signup() {
     setForm({ ...form, [e.target.id]: e.target.value })
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault()
 
     if (form.password.length < 6) {
@@ -30,21 +30,27 @@ export default function Signup() {
       return
     }
 
-    const saved = JSON.parse(localStorage.getItem('accounts')) || []
-    const all = [...accountsData, ...saved]
+    try {
+      const accountsData = await getAccounts()
+      const saved = JSON.parse(localStorage.getItem('accounts')) || []
+      const all = [...accountsData, ...saved]
 
-    if (all.some((a) => a.email.toLowerCase() === form.email.toLowerCase())) {
-      setError('This email is already registered.')
-      return
+      if (all.some((a) => a.email.toLowerCase() === form.email.toLowerCase())) {
+        setError('This email is already registered.')
+        return
+      }
+
+      const { confirm, ...rest } = form
+      const newUser = { id: Date.now(), ...rest, role: 'CUSTOMER', active: true }
+
+      localStorage.setItem('accounts', JSON.stringify([...saved, newUser]))
+      localStorage.setItem('currentUser', JSON.stringify(newUser))
+
+      navigate('/account')
+    } catch (err) {
+      console.error(err)
+      setError('Cannot load accounts. Please try again.')
     }
-
-    const { confirm, ...rest } = form
-    const newUser = { id: Date.now(), ...rest, role: 'CUSTOMER', active: true }
-
-    localStorage.setItem('accounts', JSON.stringify([...saved, newUser]))
-    localStorage.setItem('currentUser', JSON.stringify(newUser))
-
-    navigate('/account')
   }
 
   return (
