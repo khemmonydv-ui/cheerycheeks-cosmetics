@@ -73,30 +73,6 @@ const ABOUT_STATS = [
   { value: "100%", label: "Cruelty free" },
 ];
 
-/* ----------------------------------------------------
-   BEST SELLERS (static for now)
-   Same shape as a JSON product, so later you only replace
-   this array with your JSON data. Nothing else changes:
-
-     import products from "../data/products.json";
-     const BEST_SELLERS = products.filter((p) => p.bestSeller).slice(0, 5);
-
-   Each product can have its own "image". If it has none,
-   the default product photo is used.
----------------------------------------------------- */
-const BEST_SELLERS_DATA = [
-  { id: 1, name: "Foam Cleanser", category: "Skincare", price: 18, rating: 5, tag: "Best" },
-  { id: 2, name: "Glow Boost Serum", category: "Skincare", price: 32, oldPrice: 40, rating: 4, tag: "-20%" },
-  { id: 3, name: "Soft Moisturizer", category: "Skincare", price: 26, rating: 4 },
-  { id: 4, name: "Gentle Toner", category: "Skincare", price: 20, rating: 4, tag: "New" },
-  { id: 5, name: "Daily Sunscreen", category: "Skincare", price: 24, rating: 5 },
-];
-
-const BEST_SELLERS = BEST_SELLERS_DATA.map((p) => ({
-  ...p,
-  image: p.image ?? IMAGES.product,
-}));
-
 const TESTIMONIALS = [
 
     {
@@ -171,6 +147,9 @@ const JOURNAL = [
 /* One product in the best sellers grid */
 function ProductCard({ product }) {
   const { name, category, price, oldPrice, rating, tag, image } = product;
+  const currentPrice = Number(price) || 0;
+  const previousPrice = Number(oldPrice) || 0;
+  const productRating = Number(rating) || 0;
 
   return (
     <article className="card product-card">
@@ -193,7 +172,7 @@ function ProductCard({ product }) {
               key={i}
               size={15}
               strokeWidth={1.5}
-              fill={i < Math.round(rating) ? "currentColor" : "none"}
+              fill={i < Math.round(productRating) ? "currentColor" : "none"}
               aria-hidden="true"
             />
           ))}
@@ -201,8 +180,8 @@ function ProductCard({ product }) {
 
         <div className="product-card__footer">
           <p className="product-card__price">
-            <strong>${price.toFixed(2)}</strong>
-            {oldPrice && <s>${oldPrice.toFixed(2)}</s>}
+            <strong>${currentPrice.toFixed(2)}</strong>
+            {previousPrice > 0 && <s>${previousPrice.toFixed(2)}</s>}
           </p>
 
           <button type="button" className="product-card__add" aria-label={`Add ${name} to cart`}>
@@ -381,6 +360,45 @@ function Journal() {
 ====================================================== */
 
 function Home() {
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    async function getProducts() {
+      try {
+        const response = await fetch("/products-data/products.json");
+        if (!response.ok) throw new Error("Could not load products");
+        const data = await response.json();
+        // Supports both [ ...products ] and { "products": [ ...products ] }.
+        const productList = Array.isArray(data) ? data : data.products;
+        if (!Array.isArray(productList)) {
+          throw new Error("JSON must be an array or an object with a products array.");
+        }
+        console.log("Loaded products:", productList);
+        setProducts(productList);
+        setError("");
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    getProducts();
+  }, []);
+
+  // Prefer marked best sellers; otherwise show the first five products.
+  const featuredProducts = products.filter(
+    (product) => product.bestSeller === true || product.bestSeller === "true"
+  );
+  const bestSellers = (featuredProducts.length ? featuredProducts : products)
+    .slice(0, 5)
+    .map((product) => ({
+      ...product,
+      image: product.image || IMAGES.product,
+    }));
+
   return (
     <>
       <HeroShowcase image={IMAGES.hero} />
@@ -486,7 +504,12 @@ function Home() {
           />
 
           <div className="home-bestsellers">
-            {BEST_SELLERS.map((product) => (
+            {loading && <p>Loading...</p>}
+            {error && <p>{error}</p>}
+            {!loading && !error && bestSellers.length === 0 && (
+              <p>No products found in products.json.</p>
+            )}
+            {bestSellers.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
           </div>
