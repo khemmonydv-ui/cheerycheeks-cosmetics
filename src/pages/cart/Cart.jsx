@@ -1,11 +1,13 @@
 import { useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../../context/CartContext';
 import CartStepper from '../../components/cart/CartStepper';
 import CartItem from '../../components/cart/CartItem';
 import OrderSummary from '../../components/cart/OrderSummary';
 import PaymentMethod from '../../components/cart/PaymentMethod';
 import { money } from '../../components/cart/money';
+import { getCurrentUser } from '../../utils/session';
+import { saveOrder } from '../../utils/orders';
 import './Cart.css';
 
 const SHIPPING = 2; // flat shipping, free when the cart is empty
@@ -13,6 +15,7 @@ const TAX_RATE = 0.02;
 const PROMOS = { GLOW10: 0.1 }; // code -> discount rate
 const emptyCard = { name: '', number: '', expiry: '', cvv: '' };
 const makeOrderNumber = () => `CC-${Date.now().toString().slice(-6)}`;
+const round2 = (n) => Math.round(n * 100) / 100;
 
 // Turn what the person types into a neat value
 const formatters = {
@@ -56,6 +59,8 @@ export default function Cart() {
   const [saveCard, setSaveCard] = useState(false); // visual only, nothing is stored
   const [errors, setErrors] = useState({});
   const [order, setOrder] = useState(null);
+  const [placeError, setPlaceError] = useState('');
+  const navigate = useNavigate();
   const paymentRef = useRef(null);
 
   // ----- Totals -----
@@ -87,6 +92,15 @@ export default function Cart() {
   const handlePlaceOrder = () => {
     if (items.length === 0) return;
 
+    // An order belongs to an account, so a visitor must log in first
+    const user = getCurrentUser();
+    if (!user) {
+      navigate('/login', {
+        state: { from: '/cart', notice: 'Please log in to place your order.' },
+      });
+      return;
+    }
+
     if (method === 'card') {
       const found = validateCard(card);
       setErrors(found);
@@ -96,8 +110,44 @@ export default function Cart() {
       }
     }
 
-    // Demo only: no real payment is taken and card details are never stored
-    setOrder({ number: makeOrderNumber(), total, method });
+    // Save the order BEFORE the cart is cleared, so it shows in Account > My orders.
+    // Demo only: no real payment is taken and card details are never stored.
+    const number = makeOrderNumber();
+    const lines = items.map((item) => {
+      const unitPrice = toNumber(item.price);
+      return {
+        productId: item.id,
+        name: item.name,
+        quantity: item.qty,
+        unitPrice,
+        lineTotal: round2(unitPrice * item.qty),
+      };
+    });
+
+    const saved = saveOrder({
+      id: Date.now(),
+      orderNumber: number,
+      createdAt: new Date().toISOString(),
+      customerId: user.id,
+      customerEmail: user.email,
+      status: 'PAID',
+      currency: 'USD',
+      items: lines,
+      subtotal: round2(subtotal),
+      discount: round2(discount),
+      shipping: round2(shipping),
+      tax: round2(tax),
+      total: round2(total),
+      payments: [{ method, amount: round2(total) }],
+    });
+
+    if (!saved) {
+      setPlaceError('We could not save your order. Please try again.');
+      return;
+    }
+
+    setPlaceError('');
+    setOrder({ number, total, method });
     setCard(emptyCard);
     clearCart();
   };
@@ -114,6 +164,8 @@ export default function Cart() {
               Your order <strong>{order.number}</strong> has been placed.
             </p>
             <p className="cart-done-total">{money(order.total)}</p>
+            <p>You can see this order in My orders.</p>
+            <Link to="/account#orders" className="cart-place cart-place--link">View my orders</Link>
             <Link to="/products" className="cart-place cart-place--link">Continue shopping</Link>
           </div>
         </div>
@@ -143,6 +195,7 @@ export default function Cart() {
       <div className="cart-inner">
         <h1 className="cart-title">Your Cart</h1>
         <CartStepper current={1} />
+        {placeError && <p className="cart-place-error" role="alert">{placeError}</p>}
 
         <div className="cart-grid">
           <section className="cart-card cart-bag cart-area-bag">

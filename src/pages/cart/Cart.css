@@ -172,3 +172,5 @@
 /* ---------- Bank logo images ---------- */
 .pay-tile.has-logo { padding: 0; overflow: hidden; }
 .pay-logo-img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.cart-place-error { margin: 0 0 16px; padding: 10px 14px; color: #b3261e; background: #fdecea; border-radius: 8px; font-size: 14px; }
+.cart-done .cart-place--link { margin: 6px 6px 0; }

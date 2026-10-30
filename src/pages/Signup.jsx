@@ -1,10 +1,14 @@
 import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { getAccounts } from '../api/accounts'
 import './Signup.css'
 
 export default function Signup() {
   const navigate = useNavigate()
+  const location = useLocation()
+  // Set by the "please log in" alert: the page to return to, and a message to show
+  const backTo = location.state?.from ?? '/account'
+  const notice = location.state?.notice
   const [form, setForm] = useState({
     fullName: '',
     email: '',
@@ -46,7 +50,7 @@ export default function Signup() {
       localStorage.setItem('accounts', JSON.stringify([...saved, newUser]))
       localStorage.setItem('currentUser', JSON.stringify(newUser))
 
-      navigate('/account')
+      navigate(backTo, { replace: true })
     } catch (err) {
       console.error(err)
       setError('Cannot load accounts. Please try again.')
@@ -93,12 +97,13 @@ export default function Signup() {
               autoComplete="new-password" value={form.confirm} onChange={handleChange} required />
           </div>
 
+          {notice && <p className="signup-notice">{notice}</p>}
           {error && <p className="signup-error" role="alert">{error}</p>}
 
           <button type="submit" className="btn btn-primary btn-block">Sign up</button>
 
           <p className="signup-switch">
-            Already have an account? <Link to="/login">Log in</Link>
+            Already have an account? <Link to="/login" state={location.state}>Log in</Link>
           </p>
         </form>
       </div>

@@ -76,3 +76,13 @@
     padding: var(--space-6);
   }
 }
+
+/* Message from the "please log in" alert */
+.signup-notice {
+  margin: 0;
+  padding: 10px 12px;
+  font-size: 13px;
+  color: #604c79;
+  background: #f3eef8;
+  border-radius: 8px;
+}
