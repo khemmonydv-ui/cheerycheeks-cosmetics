@@ -3,6 +3,16 @@ import { useProducts } from '../../context/ProductsContext';
 
 const empty = { name: '', category: '', description: '', price: '', stock: '', image: '', visible: true };
 
+// Pictures already in public/images/products/ (the browser cannot list a folder,
+// so add a new file name here when you put another picture in that folder)
+const PRODUCT_PICTURES = [
+  'skincare1.jpg', 'skincare2.jpg', 'skincare3.jpg', 'skincare4.jpg', 'skincare5.jpg', 'skincare6.jpg',
+  'make-up.jpg', 'lip1.jpg', 'lips.jpg', 'blush.jpg', 'blush1.jpg',
+  'Haircare.jpg', 'Haircare1.jpg', 'Haircare2.jpg',
+  'bodycare.jpg', 'bodycare1.jpg', 'bodycare2.jpg', 'bodycare3.jpg',
+  'Fragrance.jpg', 'Fragrance2.jpg', 'Fragrance3.jpg', 'Fragrance4.jpg',
+];
+
 const MAX_SIDE = 600; // pictures are shrunk to this size so they stay small when saved
 
 // Read an image file, shrink it, and return it as a text string (data URL)
@@ -93,7 +103,7 @@ export default function ProductFormModal({ product, onSave, onClose }) {
               onChange={set}
             />
           </label>
-  
+
           <div className="adm-row">
             <label>Price ($)
               <input name="price" type="number" min="0" step="0.01" value={form.price} onChange={set} required />
@@ -102,7 +112,7 @@ export default function ProductFormModal({ product, onSave, onClose }) {
               <input name="stock" type="number" min="0" step="1" value={form.stock} onChange={set} required />
             </label>
           </div>
-  
+
           <div className="adm-field">
             <span>Image</span>
             <div className="adm-upload">
@@ -130,9 +140,20 @@ export default function ProductFormModal({ product, onSave, onClose }) {
                 )}
               </div>
             </div>
+            <label>Or choose a picture from the shop
+              <select
+                value={PRODUCT_PICTURES.some((n) => form.image === `/images/products/${n}`) ? form.image : ''}
+                onChange={(e) => e.target.value && setForm({ ...form, image: e.target.value })}
+              >
+                <option value="">Select a picture...</option>
+                {PRODUCT_PICTURES.map((n) => (
+                  <option key={n} value={`/images/products/${n}`}>{n}</option>
+                ))}
+              </select>
+            </label>
             {error && <small className="adm-error">{error}</small>}
           </div>
-  
+
           <label className="adm-check">
             <input name="visible" type="checkbox" checked={form.visible} onChange={set} />
             Show on site

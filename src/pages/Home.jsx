@@ -27,7 +27,8 @@ import PanhaPhoto from "../assets/profiles/panha.jpg";
 import routinePhoto from "../assets/images/routine.jpg";
 import guidPhoto from "../assets/images/guid.jpg";
 import skincarePhoto from "../assets/images/skincare.jpg";
-import HeroShowcase from "../components/home/Heroshowcase"; 
+import HeroShowcase from "../components/home/Heroshowcase";
+import { useProducts } from "../context/ProductsContext";
 import "./Home.css";
 
 
@@ -363,6 +364,7 @@ function Journal() {
 ====================================================== */
 
 function Home() {
+  const { products: shopProducts, status: shopStatus } = useProducts(); // admin edits
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [categoriesLoading, setCategoriesLoading] = useState(true);
@@ -417,11 +419,19 @@ function Home() {
     (product) => product.bestSeller === true || product.bestSeller === "true"
   );
   const bestSellers = (featuredProducts.length ? featuredProducts : products)
+    .map((product) => {
+      // admin changes (picture, name, price, hidden, deleted) are saved in the shared context
+      const edited = shopProducts.find((item) => Number(item.id) === Number(product.id));
+      return { ...product, edited };
+    })
+    .filter(({ edited }) => shopStatus !== "ready" || (edited && edited.visible !== false))
     .slice(0, 5)
-    .map((product) => ({
+    .map(({ edited, ...product }) => ({
       ...product,
+      name: edited?.name ?? product.name,
+      price: edited?.price ?? product.price,
       category: categories.find((item) => item.id === product.categoryId)?.name || product.category,
-      image: product.image || null,
+      image: edited?.image || product.image || null,
     }));
 
   return (
