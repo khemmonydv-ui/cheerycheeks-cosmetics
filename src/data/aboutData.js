@@ -5,7 +5,7 @@ export const hero = {
   eyebrow: 'About our beauty brand',
   title: 'About our beauty brand',
   text: 'Discover premium cosmetics designed to enhance your natural beauty. We create high-quality products that help you feel confident every day, with gentle formulas, soft shades and honest advice.',
-  image: 'src/assets/12.jpg',
+  image: 'src/assets/images/ba.jpg',
   imageAlt: '',
   cta: { label: 'Read our story', href: '#story' },
 };
@@ -24,13 +24,13 @@ export const missionVision = [
 ];
 
 export const favourites = {
-  title: 'Customer favourites',
-  subtitle: 'Select any product to see details.',
+  title: 'favourites Category',
+  subtitle: 'Select any product that you prefer.',
   items: [
-    { id: 'makeup', name: 'Makeup', image: 'src/assets/makeup.jpg', href: '/products/makeup' },
-    { id: 'haircare', name: 'Haircare', image: 'src/assets/haricare.jpg', href: '/products/haircare' },
-    { id: 'skincare', name: 'Skincare', image: 'src/assets/skincare.png', href: '/products/skincare' },
-    { id: 'bodycare', name: 'Bodycare', image: 'src/assets/bodycare.jpg', href: '/products/bodycare' },
+    { id: 'makeup', name: 'Makeup', image: 'src/assets/images/makeup.jpg', href: '/products/makeup' },
+    { id: 'haircare', name: 'Haircare', image: 'src/assets/images/haricare.jpg', href: '/products/haircare' },
+    { id: 'bodycare', name: 'Bodycare', image: 'src/assets/images/bodycare.jpg', href: '/products/bodycare' },
+    { id: 'Fragrance', name: 'fragrance', image: 'src/assets/images/Fragrance4.jpg', href: '/products/fragrance' },
   ],
 };
 
@@ -41,6 +41,7 @@ export const whyChooseUs = {
     { id: 'natural', title: 'Natural beauty', text: 'Formulas that enhance your features and care for your skin, never mask them.' },
     { id: 'care', title: 'Customer care', text: 'Shade matching, routine advice and friendly after-sale support, in store and online.' },
   ],
+ 
 };
 
 export const process = {
