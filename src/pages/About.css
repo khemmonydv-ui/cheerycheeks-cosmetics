@@ -219,7 +219,49 @@
 
 /* ======================================
    PRODUCT / CATEGORY CARDS
-====================================== */
+
+/* Grid
+   Mobile / tablet: horizontal scroll, cards never cut off
+   Desktop (1025px+): 4 equal columns
+*/
+
+.grid.grid-products {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(240px, 1fr);
+  gap: var(--space-6);
+  padding: 6px 4px 16px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+
+.grid-products > * {
+  scroll-snap-align: start;
+}
+
+/* Card */
+
+.product-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  text-align: center;
+  text-decoration: none;
+  color: inherit;
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease;
+}
+
+.product-card__image {
+  aspect-ratio: 7 / 5; /* same image size on every card */
+  overflow: hidden;
 
 .product-card {
   display: block;

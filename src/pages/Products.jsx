@@ -1,20 +1,22 @@
-
-// src/pages/Products.jsx
-
-import { useState, useCallback, useEffect, useRef, useMemo } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useState, useEffect, useCallback, useRef } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import SearchBar from '../components/product/SearchBar';
 import FilterTabs from '../components/product/FilterTabs';
 import SortSelect from '../components/product/SortSelect';
 import ProductCard from '../components/product/ProductCard';
 import ProductDetail from '../components/product/ProductDetail';
+import LoginPrompt from '../components/common/LoginPrompt';
 
 import { sortProducts } from '../utils/sortProducts';
+import { getCurrentUser } from '../utils/session';
 import { useProducts } from '../context/ProductsContext';
 import { useCart } from '../context/CartContext';
 
-// Grey placeholder cards shown while the JSON is loading
+// ==========================================
+// LOADING SKELETON
+// ==========================================
+
 function SkeletonGrid() {
   return (
     <div className="grid" aria-hidden="true">
@@ -33,95 +35,243 @@ function SkeletonGrid() {
   );
 }
 
-function Product() {
-  // Read and update category information in the URL
-  const [searchParams, setSearchParams] = useSearchParams();
+// ==========================================
+// PRODUCT PAGE
+// ==========================================
+
+export default function Products() {
+
+  // ========================================
+  // 1. STATE
+  // ========================================
+
+  const [jsonProducts, setJsonProducts] = useState([]);
+  const [jsonCategories, setJsonCategories] = useState([]);
+
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+  const [attempt, setAttempt] = useState(0);
 
   const [active, setActive] = useState('All');
   const [query, setQuery] = useState('');
   const [sort, setSort] = useState('featured');
+
   const [selectedId, setSelectedId] = useState(null);
   const [notice, setNotice] = useState('');
+  const [promptFor, setPromptFor] = useState('');
 
   const noticeTimer = useRef(null);
 
-  // Products and categories from JSON
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  // Keep admin changes and customer reviews working
   const {
-    products: allProducts,
-    categories,
-    status,
-    error,
+    products: contextProducts,
+    status: contextStatus,
+    error: contextError,
     reload,
     addReview,
   } = useProducts();
 
-  // Shared shopping cart
+  // Shared cart
   const { items, addToCart } = useCart();
 
-  // Count how many of each product are already in the cart
-  const inCart = new Map(items.map((i) => [i.id, i.qty]));
+  // ========================================
+  // 2. FETCH JSON USING ASYNC / AWAIT
+  // ========================================
 
-  // Only show products that are visible
-  const products = allProducts.filter((p) => p.visible);
-
-  // Get category names from JSON categories
-  // Only show categories that have visible products
-  const categoryNames = useMemo(() => {
-    return categories
-      .map((category) => category.name)
-      .filter((name) =>
-        products.some((product) => product.category === name)
-      );
-  }, [categories, allProducts]);
-
-  // Make category names easier to compare
-  // Example: "Body Care" becomes "bodycare"
-  const normalizeCategory = (name) => {
-    return name.toLowerCase().replace(/[\s_-]+/g, '');
-  };
-
-  // Sync category filter with URL
   useEffect(() => {
-    const urlCategory = searchParams.get('category');
 
-    // No category in URL means show all products
-    if (!urlCategory) {
-      setActive('All');
+    const controller = new AbortController();
+
+    async function fetchProducts() {
+
+      try {
+
+        setLoading(true);
+        setError('');
+
+        // Fetch both related JSON files
+        const baseUrl = import.meta.env.BASE_URL;
+
+        const productsResponse = await fetch(
+          `${baseUrl}products-data/products.json`,
+          { signal: controller.signal }
+        );
+
+        const categoriesResponse = await fetch(
+          `${baseUrl}products-data/categories.json`,
+          { signal: controller.signal }
+        );
+
+        // Check responses
+        if (!productsResponse.ok) {
+          throw new Error('Failed to fetch products.json');
+        }
+
+        if (!categoriesResponse.ok) {
+          throw new Error('Failed to fetch categories.json');
+        }
+
+        // Convert JSON into JavaScript arrays
+        const productsData = await productsResponse.json();
+
+        const categoriesData = await categoriesResponse.json();
+
+        if (
+          !Array.isArray(productsData) ||
+          !Array.isArray(categoriesData)
+        ) {
+          throw new Error('Invalid JSON data format');
+        }
+
+        // Save data to React state
+        setJsonProducts(productsData);
+        setJsonCategories(categoriesData);
+
+      } catch (err) {
+
+        if (err.name === 'AbortError') return;
+
+        setError(err.message);
+
+      } finally {
+
+        if (!controller.signal.aborted) {
+          setLoading(false);
+        }
+
+      }
+    }
+
+    fetchProducts();
+
+    return () => {
+      controller.abort();
+    };
+
+  }, [attempt]);
+
+
+  // ========================================
+  // 3. COMBINE JSON WITH SHARED PRODUCT DATA
+  // ========================================
+
+  // ProductsContext contains admin edits,
+  // customer reviews, stock and sales information.
+
+  const productMap = new Map(
+    contextProducts.map((product) => [
+      product.id,
+      product,
+    ])
+  );
+
+  const jsonIds = new Set(
+    jsonProducts.map((product) => product.id)
+  );
+
+  // Match products.json IDs with live product data
+  const productsFromJson = jsonProducts
+    .map((product) => productMap.get(product.id))
+    .filter(Boolean);
+
+  // Include products created by the admin
+  const addedProducts = contextProducts.filter(
+    (product) => !jsonIds.has(product.id)
+  );
+
+  // Only visible products
+  const products = [
+    ...productsFromJson,
+    ...addedProducts,
+  ].filter((product) => product.visible);
+
+
+  // ========================================
+  // 4. GET CATEGORIES
+  // ========================================
+
+  const categoryNames = [
+    ...new Set([
+      ...jsonCategories.map((category) => category.name),
+      ...products.map((product) => product.category),
+    ]),
+  ].filter((name) =>
+    products.some((product) => product.category === name)
+  );
+
+
+  // ========================================
+  // 5. SEARCH AND FILTER PRODUCTS
+  // ========================================
+
+  // Search products
+  const searchText = query.trim().toLowerCase();
+
+  const filteredProducts = products.filter((product) => {
+
+    const matchCategory =
+      active === 'All' ||
+      product.category === active;
+
+    const matchSearch = `
+      ${product.name}
+      ${product.brand}
+      ${product.category}
+      ${product.sku}
+    `
+      .toLowerCase()
+      .includes(searchText);
+
+    return matchCategory && matchSearch;
+
+  });
+
+
+  // ========================================
+  // 6. SORT PRODUCTS
+  // ========================================
+
+  const visibleProducts = sortProducts(
+    filteredProducts,
+    sort
+  );
+
+
+  // ========================================
+  // 7. SELECT PRODUCT DETAILS
+  // ========================================
+
+  const selected = products.find(
+    (product) => product.id === selectedId
+  );
+
+  const closeDetail = useCallback(() => {
+    setSelectedId(null);
+  }, []);
+
+
+  // ========================================
+  // 8. CART
+  // ========================================
+
+  const inCart = new Map(
+    items.map((item) => [
+      item.id,
+      item.qty,
+    ])
+  );
+
+  const handleAddToCart = (product) => {
+
+    // User must log in before adding to cart
+    if (!getCurrentUser()) {
+      setPromptFor(product.name);
       return;
     }
 
-    // Find the real category name from JSON
-    const matchedCategory = categoryNames.find(
-      (name) =>
-        normalizeCategory(name) === normalizeCategory(urlCategory)
-    );
-
-    // Select the matching category
-    setActive(matchedCategory || 'All');
-  }, [searchParams, categoryNames]);
-
-  // Handle clicking a category tab
-  const handleCategoryChange = (category) => {
-    setActive(category);
-
-    if (category === 'All') {
-      setSearchParams({});
-    } else {
-      setSearchParams({
-        category: normalizeCategory(category),
-      });
-    }
-  };
-
-  // Clear search and category filters
-  const clearFilters = () => {
-    setActive('All');
-    setQuery('');
-    setSearchParams({});
-  };
-
-  // Handle adding a product to the cart
-  const handleAddToCart = (product) => {
     if (!addToCart(product)) return;
 
     setNotice(`${product.name} added to your cart`);
@@ -131,93 +281,173 @@ function Product() {
     noticeTimer.current = setTimeout(() => {
       setNotice('');
     }, 2200);
+
   };
 
-  // Clear timer when component is removed
+
+  // ========================================
+  // 9. LOGIN / SIGNUP
+  // ========================================
+
+  const closePrompt = useCallback(() => {
+    setPromptFor('');
+  }, []);
+
+  const goTo = (path) => {
+
+    setPromptFor('');
+
+    navigate(path, {
+      state: {
+        from: location.pathname + location.search,
+        notice:
+          'Please log in or create an account to add products to your cart.',
+      },
+    });
+
+  };
+
+
+  // ========================================
+  // 10. CLEAR FILTERS
+  // ========================================
+
+  const clearFilters = () => {
+    setActive('All');
+    setQuery('');
+  };
+
+
+  // ========================================
+  // 11. RETRY FETCH
+  // ========================================
+
+  const handleRetry = () => {
+    reload();
+    setAttempt((previous) => previous + 1);
+  };
+
+
+  // ========================================
+  // 12. CLEANUP
+  // ========================================
+
   useEffect(() => {
-    return () => clearTimeout(noticeTimer.current);
+    return () => {
+      clearTimeout(noticeTimer.current);
+    };
   }, []);
 
-  // Search products
-  const searchText = query.trim().toLowerCase();
 
-  // Filter and sort products
-  const visible = sortProducts(
-    products.filter((product) => {
-      const matchCategory =
-        active === 'All' || product.category === active;
+  // ========================================
+  // 13. LOADING AND ERROR STATES
+  // ========================================
 
-      const matchSearch = `${product.name} ${product.brand} ${product.category} ${product.sku}`
-        .toLowerCase()
-        .includes(searchText);
+  const isLoading =
+    loading || contextStatus === 'loading';
 
-      return matchCategory && matchSearch;
-    }),
-    sort
-  );
+  const loadError =
+    error ||
+    (contextStatus === 'error' ? contextError : '');
 
-  // Find selected product for the detail modal
-  const selected = products.find((p) => p.id === selectedId);
+  const isReady =
+    !isLoading && !loadError;
 
-  const closeDetail = useCallback(() => {
-    setSelectedId(null);
-  }, []);
+
+  // ========================================
+  // 14. RETURN JSX
+  // ========================================
 
   return (
+
     <section className="collection">
-      <h1 className="collection-title">Our Collection</h1>
+
+      {/* PAGE TITLE */}
+
+      <h1 className="collection-title">
+        Our Collection
+      </h1>
 
       <p className="collection-subtitle">
         Thoughtfully made essentials for your daily ritual.
       </p>
 
-      {/* Search */}
+
+      {/* SEARCH BAR */}
+
       <SearchBar
         value={query}
         onChange={setQuery}
       />
 
-      {/* Category filters */}
+
+      {/* CATEGORY FILTER */}
+
       <FilterTabs
         categories={['All', ...categoryNames]}
         active={active}
-        onChange={handleCategoryChange}
+        onChange={setActive}
       />
 
-      {/* Sort products */}
+
+      {/* SORT PRODUCTS */}
+
       <SortSelect
         value={sort}
         onChange={setSort}
       />
 
-      {/* Loading state */}
-      {status === 'loading' && <SkeletonGrid />}
 
-      {/* Error state */}
-      {status === 'error' && (
+      {/* ====================================
+          LOADING
+      ==================================== */}
+
+      {isLoading && (
+        <SkeletonGrid />
+      )}
+
+
+      {/* ====================================
+          ERROR
+      ==================================== */}
+
+      {!isLoading && loadError && (
+
         <div className="state-box" role="alert">
+
           <p className="state-title">
-            We couldn’t load the products.
+            We couldn't load the products.
           </p>
 
           <p className="state-text">
-            {error}
+            {loadError}
           </p>
 
           <button
+            type="button"
             className="state-btn"
-            onClick={reload}
+            onClick={handleRetry}
           >
             Try again
           </button>
+
         </div>
+
       )}
 
-      {/* Products loaded successfully */}
-      {status === 'ready' && (
+
+      {/* ====================================
+          DISPLAY PRODUCTS
+      ==================================== */}
+
+      {isReady && (
+
         <>
-          {visible.length === 0 ? (
+
+          {visibleProducts.length === 0 ? (
+
             <div className="state-box">
+
               <p className="state-title">
                 No products found.
               </p>
@@ -227,15 +457,21 @@ function Product() {
               </p>
 
               <button
+                type="button"
                 className="state-btn"
                 onClick={clearFilters}
               >
                 Clear filters
               </button>
+
             </div>
+
           ) : (
+
             <div className="grid">
-              {visible.map((product) => (
+
+              {visibleProducts.map((product) => (
+
                 <ProductCard
                   key={product.id}
                   product={product}
@@ -243,20 +479,39 @@ function Product() {
                   onAddToCart={handleAddToCart}
                   onSelect={setSelectedId}
                 />
+
               ))}
+
             </div>
+
           )}
 
+
+          {/* PRODUCT COUNT */}
+
           <p className="collection-count">
-            {active === 'All' && searchText === '' ? 'Showing all ' : 'Showing '}
-            {visible.length}{' '}
-            {visible.length === 1 ? 'essential' : 'essentials'}
+
+            Showing {visibleProducts.length}
+
+            {' '}
+
+            {visibleProducts.length === 1
+              ? 'essential'
+              : 'essentials'}
+
           </p>
+
         </>
+
       )}
 
-      {/* Product detail modal */}
+
+      {/* ====================================
+          PRODUCT DETAIL MODAL
+      ==================================== */}
+
       {selected && (
+
         <ProductDetail
           key={selected.id}
           product={selected}
@@ -265,9 +520,30 @@ function Product() {
           onAddToCart={handleAddToCart}
           onAddReview={addReview}
         />
+
       )}
 
-      {/* Cart notification */}
+
+      {/* ====================================
+          LOGIN PROMPT
+      ==================================== */}
+
+      {promptFor && (
+
+        <LoginPrompt
+          productName={promptFor}
+          onLogin={() => goTo('/login')}
+          onSignup={() => goTo('/signup')}
+          onClose={closePrompt}
+        />
+
+      )}
+
+
+      {/* ====================================
+          CART NOTIFICATION
+      ==================================== */}
+
       <div
         className={notice ? 'toast show' : 'toast'}
         role="status"
@@ -275,8 +551,8 @@ function Product() {
       >
         {notice}
       </div>
+
     </section>
+
   );
 }
-
-export default Product;

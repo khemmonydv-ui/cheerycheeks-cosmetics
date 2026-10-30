@@ -730,6 +730,32 @@
 }
 
 /* ======================================
+   ONE SPACING RHYTHM FOR THE HOME PAGE
+   Every section uses the same --section-spacing, and two
+   white sections in a row share ONE gap (not two stacked).
+   Works on its own: no wrapper needed in Home.jsx.
+====================================== */
+
+.home-quote-section {
+  padding-block: var(--section-spacing);
+}
+
+/* Bestsellers -> quote, and quote -> journal: one gap only */
+.section + .home-quote-section,
+.home-quote-section + .section {
+  padding-top: 0;
+}
+
+.home-head {
+  margin-bottom: var(--space-8);
+}
+
+/* "View all" link sits on the same line as the title text */
+.home-head__link {
+  padding-bottom: var(--space-2);
+}
+
+/* ======================================
    TABLET: 769px+
 ====================================== */
 

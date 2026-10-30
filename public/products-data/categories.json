@@ -1,27 +1,36 @@
+
+    
+  
 [
   {
-    "id":1,
-    "name":"Skincare",
-    "description":"Face care products"
+    "id": 1,
+    "name": "Skincare",
+    "description": "Face care products",
+    "image": "/images/products/skincare5.jpg"
   },
   {
-    "id":2,
-    "name":"Makeup",
-    "description":"Cosmetics and color products"
+    "id": 2,
+    "name": "Makeup",
+    "description": "Cosmetics and color products",
+    "image": "/images/products/make-up.jpg"
   },
   {
-    "id":3,
-    "name":"Haircare",
-    "description":"Hair washing and treatment"
+    "id": 3,
+    "name": "Haircare",
+    "description": "Hair washing and treatment",
+    "image": "/images/products/Haircare.jpg"
   },
   {
-    "id":4,
-    "name":"Fragrance",
-    "description":"Perfumes and body fragrance"
+    "id": 4,
+    "name": "Fragrance",
+    "description": "Perfumes and body fragrance",
+    "image": "/images/products/Fragrance2.jpg"
   },
   {
-    "id":5,
-    "name":"Body Care",
-    "description":"Body and hand care"
+    "id": 5,
+    "name": "Body Care",
+    "description": "Body and hand care",
+    "image": "/images/products/bodycare.jpg"
   }
 ]
+

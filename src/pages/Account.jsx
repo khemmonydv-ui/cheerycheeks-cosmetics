@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react'
 import { Link, Navigate } from 'react-router-dom'
 
+import OrdersSection from '../components/account/OrdersSection'
 import './Account.css'
 
 const menu = [
@@ -249,6 +250,8 @@ function AccountPage({ user }) {
             </p>
           </form>
         </section>
+
+        <OrdersSection user={user} />
       </div>
     </main>
   )
