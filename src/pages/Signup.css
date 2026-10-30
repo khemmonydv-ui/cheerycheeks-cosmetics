@@ -1,6 +1,17 @@
 .signup-page {
-  padding-block: var(--space-12);
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;        
+  justify-content: center;    
+  padding: var(--space-6) var(--page-padding);
+  box-sizing: border-box;
   background: var(--color-surface);
+}
+
+.signup-page .container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }
 
 .signup-card {
