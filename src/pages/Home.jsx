@@ -27,7 +27,8 @@ import PanhaPhoto from "../assets/profiles/panha.jpg";
 import routinePhoto from "../assets/images/routine.jpg";
 import guidPhoto from "../assets/images/guid.jpg";
 import skincarePhoto from "../assets/images/skincare.jpg";
-import HeroShowcase from "../components/home/Heroshowcase"; 
+import HeroShowcase from "../components/home/Heroshowcase";
+import { useProducts } from "../context/ProductsContext";
 import "./Home.css";
 
 
@@ -141,6 +142,16 @@ const JOURNAL = [
 ====================================================== */
 
 /* One product in the best sellers grid */
+function ProductImage({ src, alt, size = 48 }) {
+  const [failed, setFailed] = useState(false);
+  useEffect(() => setFailed(false), [src]);
+  return src && !failed ? (
+    <img src={src} alt={alt} loading="lazy" onError={() => setFailed(true)} />
+  ) : (
+    <Sparkles size={size} strokeWidth={1.25} aria-hidden="true" />
+  );
+}
+
 function ProductCard({ product }) {
   const { name, category, categoryId, price, oldPrice, rating, tag, image } = product;
   const displayCategory = category || "Beauty";
@@ -152,11 +163,7 @@ function ProductCard({ product }) {
     <article className="card product-card">
       <div className="product-card__media">
         {tag && <span className="product-card__tag">{tag}</span>}
-        {image ? (
-          <img src={image} alt={name} loading="lazy" />
-        ) : (
-          <Sparkles size={48} strokeWidth={1.25} aria-hidden="true" />
-        )}
+        <ProductImage src={image} alt={name} />
       </div>
 
       <div className="product-card__body">
@@ -357,6 +364,7 @@ function Journal() {
 ====================================================== */
 
 function Home() {
+  const { products: shopProducts, status: shopStatus } = useProducts(); // admin edits
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [categoriesLoading, setCategoriesLoading] = useState(true);
@@ -411,11 +419,19 @@ function Home() {
     (product) => product.bestSeller === true || product.bestSeller === "true"
   );
   const bestSellers = (featuredProducts.length ? featuredProducts : products)
+    .map((product) => {
+      // admin changes (picture, name, price, hidden, deleted) are saved in the shared context
+      const edited = shopProducts.find((item) => Number(item.id) === Number(product.id));
+      return { ...product, edited };
+    })
+    .filter(({ edited }) => shopStatus !== "ready" || (edited && edited.visible !== false))
     .slice(0, 5)
-    .map((product) => ({
+    .map(({ edited, ...product }) => ({
       ...product,
+      name: edited?.name ?? product.name,
+      price: edited?.price ?? product.price,
       category: categories.find((item) => item.id === product.categoryId)?.name || product.category,
-      image: product.image || null,
+      image: edited?.image || product.image || null,
     }));
 
   return (
@@ -466,7 +482,7 @@ function Home() {
                     <span className="home-cat__arrow"><ArrowRight size={16} strokeWidth={2} aria-hidden="true" /></span>
                   </div>
                   <div className="home-cat__media">
-                    {category.image ? <img src={category.image} alt={category.name} loading="lazy" /> : <Icon size={72} strokeWidth={1} aria-hidden="true" />}
+                    <ProductImage src={category.image} alt={category.name} size={72} />
                   </div>
                 </Link>
               );

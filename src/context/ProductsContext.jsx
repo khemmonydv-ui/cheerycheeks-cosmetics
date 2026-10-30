@@ -47,7 +47,8 @@ function fromJson(raw, sold) {
     price: Number(raw.price),
     stock: Number(raw.stockQuantity),
     visible: Boolean(raw.active),
-    image: meta.image,
+    // the picture written in products.json wins; the old built-in one is only a fallback
+    image: raw.image || meta.image,
     bg: meta.bg,
     description: meta.description,
     sold,

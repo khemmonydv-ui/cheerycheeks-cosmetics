@@ -92,38 +92,29 @@ export default function Products() {
         setLoading(true);
         setError('');
 
-        // Fetch both related JSON files
+        // Both JSON files must live under public/ (not src/).
         const baseUrl = import.meta.env.BASE_URL;
-
-        const productsResponse = await fetch(
-          `${baseUrl}products-data/products.json`,
-          { signal: controller.signal }
-        );
-
-        const categoriesResponse = await fetch(
-          `${baseUrl}products-data/categories.json`,
-          { signal: controller.signal }
-        );
-
-        // Check responses
-        if (!productsResponse.ok) {
-          throw new Error('Failed to fetch products.json');
+        async function readJson(path) {
+          const response = await fetch(`${baseUrl}${path}`, {
+            signal: controller.signal,
+          });
+          if (!response.ok) {
+            throw new Error(`${path}: HTTP ${response.status}. Check the file location.`);
+          }
+          const contentType = response.headers.get('content-type') || '';
+          if (!contentType.includes('json')) {
+            throw new Error(`${path} returned HTML instead of JSON. Check the filename and public/ folder.`);
+          }
+          return await response.json();
         }
 
-        if (!categoriesResponse.ok) {
-          throw new Error('Failed to fetch categories.json');
-        }
+        const [productsData, categoriesData] = await Promise.all([
+          readJson('products-data/products.json'),
+          readJson('products-data/categories.json'),
+        ]);
 
-        // Convert JSON into JavaScript arrays
-        const productsData = await productsResponse.json();
-
-        const categoriesData = await categoriesResponse.json();
-
-        if (
-          !Array.isArray(productsData) ||
-          !Array.isArray(categoriesData)
-        ) {
-          throw new Error('Invalid JSON data format');
+        if (!Array.isArray(productsData) || !Array.isArray(categoriesData)) {
+          throw new Error('Both JSON files must contain arrays.');
         }
 
         // Save data to React state
@@ -161,47 +152,62 @@ export default function Products() {
   // ProductsContext contains admin edits,
   // customer reviews, stock and sales information.
 
+  const categoryById = new Map(
+    jsonCategories.map((category) => [Number(category.id), category.name])
+  );
+
   const productMap = new Map(
-    contextProducts.map((product) => [
-      product.id,
-      product,
-    ])
+    contextProducts.map((product) => [Number(product.id), product])
   );
 
-  const jsonIds = new Set(
-    jsonProducts.map((product) => product.id)
+  const jsonIds = new Set(jsonProducts.map((product) => Number(product.id)));
+
+  // Keep admin edits and reviews, while retaining JSON images and other
+  // fields if the context has no value for them.
+  const productsFromJson = jsonProducts.map((jsonProduct) => {
+    const edited = productMap.get(Number(jsonProduct.id)) || {};
+    const product = { ...jsonProduct, ...edited };
+    return {
+      ...product,
+      // context picture = products.json picture, unless the admin changed it
+      image: edited.image || jsonProduct.image || null,
+      category: product.category || categoryById.get(Number(product.categoryId)) || 'Beauty',
+      visible: product.visible ?? product.active ?? true,
+    };
+  });
+
+  const addedProducts = contextProducts
+    .filter((product) => !jsonIds.has(Number(product.id)))
+    .map((product) => ({
+      ...product,
+      category: product.category || categoryById.get(Number(product.categoryId)) || 'Beauty',
+      visible: product.visible ?? product.active ?? true,
+    }));
+
+  const products = [...productsFromJson, ...addedProducts].filter(
+    (product) => product.visible
   );
-
-  // Match products.json IDs with live product data
-  const productsFromJson = jsonProducts
-    .map((product) => productMap.get(product.id))
-    .filter(Boolean);
-
-  // Include products created by the admin
-  const addedProducts = contextProducts.filter(
-    (product) => !jsonIds.has(product.id)
-  );
-
-  // Only visible products
-  const products = [
-    ...productsFromJson,
-    ...addedProducts,
-  ].filter((product) => product.visible);
-
-
-  // ========================================
-  // 4. GET CATEGORIES
-  // ========================================
 
   const categoryNames = [
     ...new Set([
       ...jsonCategories.map((category) => category.name),
       ...products.map((product) => product.category),
     ]),
-  ].filter((name) =>
-    products.some((product) => product.category === name)
-  );
+  ].filter((name) => products.some((product) => product.category === name));
 
+  // Home page category links use ?category=skincare etc.
+  useEffect(() => {
+    const requested = new URLSearchParams(location.search).get('category');
+    if (!requested) {
+      setActive('All');
+      return;
+    }
+    const match = jsonCategories.find(
+      (category) => category.name.toLowerCase().replace(/\\s+/g, '') ===
+        requested.toLowerCase().replace(/\\s+/g, '')
+    );
+    if (match) setActive(match.name);
+  }, [location.search, jsonCategories]);
 
   // ========================================
   // 5. SEARCH AND FILTER PRODUCTS
