@@ -78,9 +78,9 @@ const columns = [
     title: "Company",
     links: [
       { label: "About Us", to: "/about" },
-      { label: "Our Story", to: "/story" },
-      { label: "Blog", to: "/blog" },
-      { label: "Careers", to: "/careers" },
+      { label: "Our Story", to: "/about#story" },
+      { label: "Blog", to: "/about#impact" },
+      
     ],
   },
   {

@@ -62,6 +62,10 @@
   overflow: hidden;
 }
 
+#story {
+  scroll-margin-top: 100px;
+}
+
 /* Hero background image */
 
 .about-hero__bg {
