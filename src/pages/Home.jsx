@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useRef, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import {
   ArrowRight,
   ChevronRight,
@@ -27,10 +27,7 @@ import PanhaPhoto from "../assets/profiles/panha.jpg";
 import routinePhoto from "../assets/images/routine.jpg";
 import guidPhoto from "../assets/images/guid.jpg";
 import skincarePhoto from "../assets/images/skincare.jpg";
-import HeroShowcase from "../components/home/Heroshowcase";
-import LoginPrompt from "../components/common/LoginPrompt";
-import { useCart } from "../context/CartContext";
-import { getCurrentUser } from "../utils/session";
+import HeroShowcase from "../components/home/Heroshowcase"; 
 import "./Home.css";
 
 
@@ -62,12 +59,8 @@ const FEATURES = [
   { icon: RotateCcw, title: "Easy returns", text: "7-day return policy" },
 ];
 
-const CATEGORIES = [
-  { icon: Droplets, title: "Skincare", text: "Healthy, glowing skin", to: "/products?category=skincare" },
-  { icon: Palette, title: "Makeup", text: "Color & confidence", to: "/products?category=makeup" },
-  { icon: Sparkles, title: "Haircare", text: "Soft, healthy hair", to: "/products?category=haircare" },
-  { icon: Flower2, title: "Bodycare", text: "Smooth, nourished skin", to: "/products?category=bodycare" },
-];
+// Icons are presentation-only; category names and descriptions come from JSON.
+const CATEGORY_ICONS = { 1: Droplets, 2: Palette, 3: Sparkles, 4: Flower2, 5: Flower2 };
 
 const ABOUT_STATS = [
   { value: "98%", label: "Customer satisfaction" },
@@ -148,8 +141,19 @@ const JOURNAL = [
 ====================================================== */
 
 /* One product in the best sellers grid */
-function ProductCard({ product, onAddToCart }) {
-  const { name, category, price, oldPrice, rating, tag, image } = product;
+function ProductImage({ src, alt, size = 48 }) {
+  const [failed, setFailed] = useState(false);
+  useEffect(() => setFailed(false), [src]);
+  return src && !failed ? (
+    <img src={src} alt={alt} loading="lazy" onError={() => setFailed(true)} />
+  ) : (
+    <Sparkles size={size} strokeWidth={1.25} aria-hidden="true" />
+  );
+}
+
+function ProductCard({ product }) {
+  const { name, category, categoryId, price, oldPrice, rating, tag, image } = product;
+  const displayCategory = category || "Beauty";
   const currentPrice = Number(price) || 0;
   const previousPrice = Number(oldPrice) || 0;
   const productRating = Number(rating) || 0;
@@ -158,15 +162,11 @@ function ProductCard({ product, onAddToCart }) {
     <article className="card product-card">
       <div className="product-card__media">
         {tag && <span className="product-card__tag">{tag}</span>}
-        {image ? (
-          <img src={image} alt={name} loading="lazy" />
-        ) : (
-          <Sparkles size={48} strokeWidth={1.25} aria-hidden="true" />
-        )}
+        <ProductImage src={image} alt={name} />
       </div>
 
       <div className="product-card__body">
-        <p className="product-card__category">{category}</p>
+        <p className="product-card__category">{displayCategory}</p>
         <h3 className="product-card__name">{name}</h3>
 
         <p className="product-card__rating" aria-label={`Rated ${rating} out of 5`}>
@@ -187,12 +187,7 @@ function ProductCard({ product, onAddToCart }) {
             {previousPrice > 0 && <s>${previousPrice.toFixed(2)}</s>}
           </p>
 
-          <button
-            type="button"
-            className="product-card__add"
-            aria-label={`Add ${name} to cart`}
-            onClick={() => onAddToCart(product)}
-          >
+          <button type="button" className="product-card__add" aria-label={`Add ${name} to cart`}>
             <ShoppingBag size={20} strokeWidth={1.75} aria-hidden="true" />
           </button>
         </div>
@@ -369,47 +364,11 @@ function Journal() {
 
 function Home() {
   const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [categoriesLoading, setCategoriesLoading] = useState(true);
+  const [categoriesError, setCategoriesError] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [promptFor, setPromptFor] = useState("");
-  const [notice, setNotice] = useState("");
-  const noticeTimer = useRef(null);
-
-  const { addToCart } = useCart();
-  const navigate = useNavigate();
-  const location = useLocation();
-
-  // Same login requirement as the Products page.
-  const handleAddToCart = (product) => {
-    if (!getCurrentUser()) {
-      setPromptFor(product.name);
-      return;
-    }
-
-    // CartContext also checks login and available stock.
-    if (!addToCart(product)) {
-      setNotice("Sorry, this product is currently unavailable.");
-    } else {
-      setNotice(`${product.name} added to your cart`);
-    }
-
-    clearTimeout(noticeTimer.current);
-    noticeTimer.current = setTimeout(() => setNotice(""), 2200);
-  };
-
-  const closePrompt = useCallback(() => setPromptFor(""), []);
-
-  const goTo = (path) => {
-    setPromptFor("");
-    navigate(path, {
-      state: {
-        from: location.pathname + location.search,
-        notice: "Please log in or create an account to add products to your cart.",
-      },
-    });
-  };
-
-  useEffect(() => () => clearTimeout(noticeTimer.current), []);
 
   useEffect(() => {
     async function getProducts() {
@@ -435,6 +394,24 @@ function Home() {
     getProducts();
   }, []);
 
+  useEffect(() => {
+    async function getCategories() {
+      try {
+        const response = await fetch("/products-data/categories.json");
+        if (!response.ok) throw new Error("Could not load categories");
+        const data = await response.json();
+        if (!Array.isArray(data)) throw new Error("categories.json must contain an array");
+        setCategories(data);
+        setCategoriesError("");
+      } catch (err) {
+        setCategoriesError(err.message);
+      } finally {
+        setCategoriesLoading(false);
+      }
+    }
+    getCategories();
+  }, []);
+
   // Prefer marked best sellers; otherwise show the first five products.
   const featuredProducts = products.filter(
     (product) => product.bestSeller === true || product.bestSeller === "true"
@@ -443,7 +420,8 @@ function Home() {
     .slice(0, 5)
     .map((product) => ({
       ...product,
-      image: product.image || IMAGES.product,
+      category: categories.find((item) => item.id === product.categoryId)?.name || product.category,
+      image: product.image || null,
     }));
 
   return (
@@ -480,28 +458,25 @@ function Home() {
           />
 
           <div className="home-cats">
-            {CATEGORIES.map(({ icon: Icon, title, text, to }) => (
-              <Link key={title} to={to} className="home-cat">
-                <div className="home-cat__text">
-                  <span className="home-cat__icon">
-                    <Icon size={22} strokeWidth={1.75} aria-hidden="true" />
-                  </span>
-                  <h3>{title}</h3>
-                  <p>{text}</p>
-                  <span className="home-cat__arrow">
-                    <ArrowRight size={16} strokeWidth={2} aria-hidden="true" />
-                  </span>
-                </div>
-
-                <div className="home-cat__media">
-                  {IMAGES.category ? (
-                    <img src={IMAGES.category} alt="" loading="lazy" />
-                  ) : (
-                    <Icon size={72} strokeWidth={1} aria-hidden="true" />
-                  )}
-                </div>
-              </Link>
-            ))}
+            {categoriesLoading && <p>Loading categories...</p>}
+            {categoriesError && <p role="alert">{categoriesError}</p>}
+            {!categoriesLoading && !categoriesError && categories.length === 0 && <p>No categories found.</p>}
+            {categories.slice(0, 4).map((category) => {
+              const Icon = CATEGORY_ICONS[category.id] || Sparkles;
+              return (
+                <Link key={category.id} to={`/products?category=${encodeURIComponent(category.name.toLowerCase())}`} className="home-cat">
+                  <div className="home-cat__text">
+                    <span className="home-cat__icon"><Icon size={22} strokeWidth={1.75} aria-hidden="true" /></span>
+                    <h3>{category.name}</h3>
+                    <p>{category.description}</p>
+                    <span className="home-cat__arrow"><ArrowRight size={16} strokeWidth={2} aria-hidden="true" /></span>
+                  </div>
+                  <div className="home-cat__media">
+                    <ProductImage src={category.image} alt={category.name} size={72} />
+                  </div>
+                </Link>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -557,11 +532,7 @@ function Home() {
               <p>No products found in products.json.</p>
             )}
             {bestSellers.map((product) => (
-              <ProductCard
-                key={product.id}
-                product={product}
-                onAddToCart={handleAddToCart}
-              />
+              <ProductCard key={product.id} product={product} />
             ))}
           </div>
         </div>
@@ -576,19 +547,6 @@ function Home() {
 
       {/* Journal */}
       <Journal />
-
-      {promptFor && (
-        <LoginPrompt
-          productName={promptFor}
-          onLogin={() => goTo("/login")}
-          onSignup={() => goTo("/signup")}
-          onClose={closePrompt}
-        />
-      )}
-
-      <div className={notice ? "toast show" : "toast"} role="status" aria-live="polite">
-        {notice}
-      </div>
     </>
   );
 }
