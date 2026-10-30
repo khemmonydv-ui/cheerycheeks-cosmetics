@@ -1,7 +1,5 @@
-
 import { useState } from "react";
 import { Link } from "react-router-dom";
-
 import {
   Mail,
   Phone,
@@ -10,17 +8,12 @@ import {
   ArrowUp,
   LoaderCircle,
 } from "lucide-react";
-
+import { useProducts } from "../../context/ProductsContext";
 import "./Footer.css";
 
 // ---------- Brand Icons ----------
 
-function SvgIcon({
-  size = 20,
-  strokeWidth = 1.75,
-  children,
-  ...props
-}) {
+function SvgIcon({ size = 20, strokeWidth = 1.75, children, ...props }) {
   return (
     <svg
       width={size}
@@ -70,16 +63,17 @@ const TikTokIcon = (props) => (
 const columns = [
   {
     title: "Shop",
+    // Fallback only. The real list is built from your categories in Footer(),
+    // so the names always match what the products page filters on.
     links: [
       { label: "All Products", to: "/products" },
       { label: "Skincare", to: "/products?category=Skincare" },
-      { label: "makeup", to: "/products?category=makeup" },
-      { label: "haircare", to: "/products?category=haircare" },
-      { label: "fragrance", to: "/products?category=fragrance" },
-      { label: "bodycare", to: "/products?category=bodycare" },
+      { label: "Makeup", to: "/products?category=Makeup" },
+      { label: "Haircare", to: "/products?category=Haircare" },
+      { label: "Fragrance", to: "/products?category=Fragrance" },
+      { label: "Body Care", to: "/products?category=Body%20Care" },
     ],
   },
- 
   {
     title: "Company",
     links: [
@@ -92,46 +86,19 @@ const columns = [
   {
     title: "Contact Us",
     links: [
-      {
-        label: "hello@cherrycheeks.com",
-        href: "mailto:hello@cherrycheeks.com",
-        icon: Mail,
-      },
-      {
-        label: "+855 12 345 678",
-        href: "tel:+85512345678",
-        icon: Phone,
-      },
-      {
-        label: "Phnom Penh, Cambodia",
-        icon: MapPin,
-      },
+      { label: "hello@cherrycheeks.com", href: "mailto:hello@cherrycheeks.com", icon: Mail },
+      { label: "+855 12 345 678", href: "tel:+85512345678", icon: Phone },
+      { label: "Phnom Penh, Cambodia", icon: MapPin }, // plain text, no link
     ],
   },
 ];
 
 // Replace these with your real social media URLs.
 const socials = [
-  {
-    name: "Instagram",
-    href: "https://www.instagram.com/",
-    Icon: InstagramIcon,
-  },
-  {
-    name: "Facebook",
-    href: "https://www.facebook.com/",
-    Icon: FacebookIcon,
-  },
-  {
-    name: "YouTube",
-    href: "https://www.youtube.com/",
-    Icon: YoutubeIcon,
-  },
-  {
-    name: "TikTok",
-    href: "https://www.tiktok.com/",
-    Icon: TikTokIcon,
-  },
+  { name: "Instagram", href: "https://www.instagram.com/", Icon: InstagramIcon },
+  { name: "Facebook", href: "https://www.facebook.com/", Icon: FacebookIcon },
+  { name: "YouTube", href: "https://www.youtube.com/", Icon: YoutubeIcon },
+  { name: "TikTok", href: "https://www.tiktok.com/", Icon: TikTokIcon },
 ];
 
 // ---------- Newsletter Messages ----------
@@ -149,13 +116,7 @@ const MESSAGES = {
 function FooterLink({ to, href, label, icon: Icon }) {
   const content = (
     <>
-      {Icon && (
-        <Icon
-          size={16}
-          strokeWidth={1.75}
-          aria-hidden="true"
-        />
-      )}
+      {Icon && <Icon size={20} strokeWidth={1.75} aria-hidden="true" />}
       <span>{label}</span>
     </>
   );
@@ -175,21 +136,14 @@ function FooterLink({ to, href, label, icon: Icon }) {
       <a
         href={href}
         className="footer__link"
-        {...(external && {
-          target: "_blank",
-          rel: "noopener noreferrer",
-        })}
+        {...(external && { target: "_blank", rel: "noopener noreferrer" })}
       >
         {content}
       </a>
     );
   }
 
-  return (
-    <span className="footer__link">
-      {content}
-    </span>
-  );
+  return <span className="footer__link">{content}</span>;
 }
 
 // ---------- Newsletter ----------
@@ -198,14 +152,11 @@ function Newsletter() {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState("idle");
 
-  const hasError =
-    status === "invalid" || status === "failed";
-
+  const hasError = status === "invalid" || status === "failed";
   const loading = status === "loading";
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const value = email.trim();
 
     if (!EMAIL_RE.test(value)) {
@@ -217,10 +168,7 @@ function Newsletter() {
 
     try {
       // Replace this with your real API or mailing service.
-      await new Promise((resolve) =>
-        setTimeout(resolve, 600)
-      );
-
+      await new Promise((resolve) => setTimeout(resolve, 600));
       setStatus("success");
       setEmail("");
     } catch (error) {
@@ -230,15 +178,8 @@ function Newsletter() {
   };
 
   return (
-    <form
-      className="footer__form"
-      onSubmit={handleSubmit}
-      noValidate
-    >
-      <label
-        htmlFor="footer-email"
-        className="visually-hidden"
-      >
+    <form className="footer__form" onSubmit={handleSubmit} noValidate>
+      <label htmlFor="footer-email" className="visually-hidden">
         Email address
       </label>
 
@@ -250,7 +191,6 @@ function Newsletter() {
         value={email}
         onChange={(e) => {
           setEmail(e.target.value);
-
           if (status !== "idle" && status !== "loading") {
             setStatus("idle");
           }
@@ -261,11 +201,7 @@ function Newsletter() {
         disabled={loading}
       />
 
-      <button
-        type="submit"
-        className="footer__btn"
-        disabled={loading}
-      >
+      <button type="submit" className="footer__btn" disabled={loading}>
         {loading ? (
           <>
             <LoaderCircle
@@ -279,11 +215,7 @@ function Newsletter() {
         ) : (
           <>
             Join
-            <Send
-              size={16}
-              strokeWidth={2}
-              aria-hidden="true"
-            />
+            <Send size={16} strokeWidth={2} aria-hidden="true" />
           </>
         )}
       </button>
@@ -304,27 +236,13 @@ function Newsletter() {
 
 function BackToTop() {
   const handleClick = () => {
-    const reduce = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
-    ).matches;
-
-    window.scrollTo({
-      top: 0,
-      behavior: reduce ? "auto" : "smooth",
-    });
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    window.scrollTo({ top: 0, behavior: reduce ? "auto" : "smooth" });
   };
 
   return (
-    <button
-      type="button"
-      className="footer__top"
-      onClick={handleClick}
-    >
-      <ArrowUp
-        size={16}
-        strokeWidth={2}
-        aria-hidden="true"
-      />
+    <button type="button" className="footer__top" onClick={handleClick}>
+      <ArrowUp size={16} strokeWidth={2} aria-hidden="true" />
       Back to top
     </button>
   );
@@ -335,21 +253,33 @@ function BackToTop() {
 function Footer() {
   const year = new Date().getFullYear();
 
+  // Shop links come from the real category names (categories.json)
+  const { categories = [] } = useProducts() ?? {};
+  const allColumns = columns.map((col) =>
+    col.title === "Shop" && categories.length
+      ? {
+          ...col,
+          links: [
+            { label: "All Products", to: "/products" },
+            ...categories.map((c) => ({
+              label: c.name,
+              to: `/products?category=${encodeURIComponent(c.name)}`,
+            })),
+          ],
+        }
+      : col
+  );
+
   return (
     <footer className="footer">
       <div className="container">
         <div className="footer__grid">
-
           {/* Brand + Newsletter */}
-
           <div className="footer__brand">
-            <h2 className="footer__brand-title">
-              Stay Glowing
-            </h2>
+            <h2 className="footer__brand-title">Stay Glowing</h2>
 
             <p className="footer__newsletter">
-              Join our newsletter and get 10% off
-              your first order.
+              Join our newsletter and get 10% off your first order.
             </p>
 
             <Newsletter />
@@ -363,11 +293,7 @@ function Footer() {
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    <Icon
-                      size={20}
-                      strokeWidth={1.75}
-                      aria-hidden="true"
-                    />
+                    <Icon size={20} strokeWidth={1.75} aria-hidden="true" />
                   </a>
                 </li>
               ))}
@@ -375,28 +301,18 @@ function Footer() {
           </div>
 
           {/* Footer Link Columns */}
-
-          {columns.map((col) => {
+          {allColumns.map((col) => {
             const headingId = `footer-${col.title
               .toLowerCase()
               .replace(/\s+/g, "-")}`;
 
             return (
-              <div
-                key={col.title}
-                className="footer__column"
-              >
-                <h3
-                  id={headingId}
-                  className="footer__title"
-                >
+              <div key={col.title} className="footer__column">
+                <h3 id={headingId} className="footer__title">
                   {col.title}
                 </h3>
 
-                <ul
-                  className="footer__links"
-                  aria-labelledby={headingId}
-                >
+                <ul className="footer__links" aria-labelledby={headingId}>
                   {col.links.map((link) => (
                     <li key={link.label}>
                       <FooterLink {...link} />
@@ -406,15 +322,12 @@ function Footer() {
               </div>
             );
           })}
-
         </div>
 
         {/* Footer Bottom */}
-
         <div className="footer__bottom">
           <p className="footer__copy">
-            &copy; {year} Cherry Cheeks Beauty.
-            All Rights Reserved
+            &copy; {year} Cherry Cheeks Beauty. All Rights Reserved
           </p>
 
           <BackToTop />
