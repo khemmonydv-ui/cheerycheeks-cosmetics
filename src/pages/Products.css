@@ -1,0 +1,450 @@
+/* ==========================================
+   PRODUCTS PAGE
+========================================== */
+
+.collection {
+  width: 100%;
+  max-width: 1220px;
+  margin: 0 auto;
+  padding: 58px 24px 82px;
+  color: #28212d;
+  font-family: 'Inter', Arial, sans-serif;
+  text-align: center;
+}
+
+.collection,
+.collection *,
+.collection *::before,
+.collection *::after {
+  box-sizing: border-box;
+}
+
+/* ==========================================
+   COLLECTION HEADER
+========================================== */
+
+.collection .collection-title {
+  margin: 0;
+  font-size: 38px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: #28212d;
+}
+
+.collection .collection-subtitle {
+  margin: 12px 0 30px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #8d7c89;
+}
+
+/* ==========================================
+   SEARCH BAR
+========================================== */
+
+.collection .search {
+  position: relative;
+  width: 100%;
+  max-width: 530px;
+  margin: 0 auto 28px;
+}
+
+.collection .search-icon {
+  position: absolute;
+  left: 19px;
+  top: 50%;
+  width: 18px;
+  height: 18px;
+  transform: translateY(-50%);
+  color: #8a768f;
+  pointer-events: none;
+}
+
+.collection .search-input {
+  display: block;
+  width: 100%;
+  min-height: 48px;
+  padding: 13px 18px 13px 49px;
+  border: 1px solid #e6dce8;
+  border-radius: 999px;
+  outline: none;
+  background: #faf7fb;
+  color: #302735;
+  font-family: inherit;
+  font-size: 13px;
+  transition: 0.2s ease;
+}
+
+.collection .search-input::placeholder {
+  color: #a29aa5;
+}
+
+.collection .search-input:focus {
+  border-color: #806a95;
+  box-shadow: 0 0 0 3px rgba(117, 95, 142, 0.12);
+}
+
+/* ==========================================
+   FILTER LEFT AND SORT RIGHT
+========================================== */
+
+.collection .collection-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  width: 100%;
+  margin-bottom: 24px;
+}
+
+/* ==========================================
+   FILTER BUTTONS - LEFT
+========================================== */
+
+.collection .filters {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  flex: 1 1 auto;
+  min-width: 0;
+  gap: 10px;
+  margin: 0;
+}
+
+.collection .pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 37px;
+  margin: 0;
+  padding: 8px 17px;
+  border: 1px solid #e9dfe8;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #74687b;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+/* Hover */
+.collection .pill:hover {
+  border-color: #755f8e;
+  color: #755f8e;
+}
+
+/* Active Filter */
+.collection .pill.active {
+  background: #755f8e;
+  border-color: #755f8e;
+  color: #ffffff;
+}
+
+.collection .pill:focus-visible {
+  outline: 2px solid #755f8e;
+  outline-offset: 3px;
+}
+
+/* ==========================================
+   SORT BY - RIGHT
+========================================== */
+
+.collection .sort {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex: 0 0 auto;
+  gap: 10px;
+  width: auto;
+  margin: 0 0 0 auto;
+  white-space: nowrap;
+  color: #8d7c89;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.collection .sort-select {
+  min-width: 150px;
+  min-height: 37px;
+  padding: 8px 15px;
+  border: 1px solid #e5d9e8;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #47384f;
+  font-family: inherit;
+  font-size: 12px;
+  cursor: pointer;
+  outline: none;
+  transition: 0.2s ease;
+}
+
+.collection .sort-select:hover {
+  border-color: #755f8e;
+}
+
+.collection .sort-select:focus {
+  border-color: #755f8e;
+  box-shadow: 0 0 0 3px rgba(117, 95, 142, 0.12);
+}
+
+/* ==========================================
+   PRODUCT GRID
+========================================== */
+
+.collection .grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 22px;
+  width: 100%;
+  align-items: stretch;
+  margin: 0;
+  text-align: left;
+}
+
+.collection .grid > * {
+  min-width: 0;
+}
+
+/* ==========================================
+   PRODUCT COUNT
+========================================== */
+
+.collection .collection-count {
+  margin: 30px 0 0;
+  color: #8d7c89;
+  font-size: 12px;
+}
+
+/* ==========================================
+   LOADING SKELETON
+========================================== */
+
+.collection .card-skeleton {
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid #f1e0de;
+  border-radius: 15px;
+  background: #ffffff;
+}
+
+.collection .card-skeleton .card-image {
+  width: 100%;
+  aspect-ratio: 1 / 1.07;
+}
+
+.collection .card-skeleton .card-body {
+  padding: 16px;
+}
+
+.collection .skeleton-block,
+.collection .skeleton-line {
+  background: linear-gradient(
+    90deg,
+    #f2eaf0 25%,
+    #faf4f8 50%,
+    #f2eaf0 75%
+  );
+  background-size: 200% 100%;
+  animation: collection-shimmer 1.4s linear infinite;
+}
+
+.collection .skeleton-line {
+  height: 12px;
+  margin-bottom: 12px;
+  border-radius: 8px;
+}
+
+.collection .skeleton-line.short {
+  width: 60%;
+}
+
+@keyframes collection-shimmer {
+  from {
+    background-position: 200% 0;
+  }
+
+  to {
+    background-position: -200% 0;
+  }
+}
+
+/* ==========================================
+   EMPTY STATE / ERROR STATE
+========================================== */
+
+.collection .state-box {
+  max-width: 470px;
+  margin: 32px auto;
+  padding: 35px 25px;
+  border: 1px solid #eedfe9;
+  border-radius: 17px;
+  background: #fcf8fb;
+}
+
+.collection .state-title {
+  margin: 0 0 8px;
+  font-weight: 700;
+  color: #2b2430;
+}
+
+.collection .state-text {
+  margin: 0 0 22px;
+  color: #8d7c89;
+  font-size: 13px;
+}
+
+.collection .state-btn {
+  padding: 12px 20px;
+  border: none;
+  border-radius: 999px;
+  background: #755f8e;
+  color: #ffffff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.collection .state-btn:hover {
+  background: #624d7d;
+}
+
+/* ==========================================
+   ADD TO CART NOTIFICATION
+========================================== */
+
+.collection .toast {
+  position: fixed;
+  z-index: 400;
+  left: 50%;
+  bottom: 24px;
+  padding: 13px 22px;
+  border-radius: 999px;
+  background: #755f8e;
+  color: #ffffff;
+  font-size: 13px;
+  box-shadow: 0 10px 28px rgba(58, 39, 72, 0.2);
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, 14px);
+  transition: opacity 0.2s, transform 0.2s;
+}
+
+.collection .toast.show {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+/* ==========================================
+   RESPONSIVE - SMALL DESKTOP
+========================================== */
+
+@media (max-width: 1060px) {
+  .collection .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+  }
+}
+
+/* ==========================================
+   RESPONSIVE - TABLET
+========================================== */
+
+@media (max-width: 760px) {
+  .collection {
+    padding: 40px 20px 58px;
+  }
+
+  .collection .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+
+  .collection .collection-toolbar {
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+
+  .collection .sort {
+    justify-content: flex-end;
+  }
+}
+
+/* ==========================================
+   RESPONSIVE - MOBILE
+========================================== */
+
+@media (max-width: 440px) {
+  .collection {
+    padding: 32px 14px 50px;
+  }
+
+  .collection .collection-title {
+    font-size: 27px;
+  }
+
+  .collection .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .collection .collection-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+  }
+
+  .collection .filters {
+    width: 100%;
+    gap: 8px;
+  }
+
+  .collection .sort {
+    align-self: flex-end;
+  }
+
+  .collection .pill {
+    padding: 7px 12px;
+    font-size: 11px;
+  }
+
+  .collection .ccp-card__body {
+    padding: 12px;
+  }
+
+  .collection .ccp-card__name {
+    font-size: 14px;
+  }
+
+  .collection .ccp-card__add {
+    font-size: 9px;
+    padding-inline: 5px;
+  }
+}
+
+/* ==========================================
+   RESPONSIVE - EXTRA SMALL MOBILE
+========================================== */
+
+@media (max-width: 350px) {
+  .collection .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ==========================================
+   ACCESSIBILITY
+========================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .collection .skeleton-line,
+  .collection .skeleton-block {
+    animation: none;
+  }
+
+  .collection .toast {
+    transition: none;
+  }
+}

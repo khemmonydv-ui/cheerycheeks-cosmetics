@@ -12,6 +12,7 @@ import { sortProducts } from '../utils/sortProducts';
 import { getCurrentUser } from '../utils/session';
 import { useProducts } from '../context/ProductsContext';
 import { useCart } from '../context/CartContext';
+import './Products.css';
 
 // ==========================================
 // LOADING SKELETON
@@ -386,21 +387,17 @@ export default function Products() {
       />
 
 
-      {/* CATEGORY FILTER */}
+     <div className="collection-toolbar">
+        {/* LEFT: Filter */}
+        <FilterTabs
+          categories={['All', ...categoryNames]}
+          active={active}
+          onChange={setActive}
+        />
 
-      <FilterTabs
-        categories={['All', ...categoryNames]}
-        active={active}
-        onChange={setActive}
-      />
-
-
-      {/* SORT PRODUCTS */}
-
-      <SortSelect
-        value={sort}
-        onChange={setSort}
-      />
+        {/* RIGHT: Sort By */}
+        <SortSelect value={sort} onChange={setSort} />
+      </div>
 
 
       {/* ====================================
