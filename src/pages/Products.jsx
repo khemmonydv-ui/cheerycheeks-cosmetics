@@ -207,6 +207,7 @@ export default function Products() {
   // 5. SEARCH AND FILTER PRODUCTS
   // ========================================
 
+  // Search products
   const searchText = query.trim().toLowerCase();
 
   const filteredProducts = products.filter((product) => {
