@@ -382,6 +382,7 @@
   align-items: center;
   justify-content: center;
   width: 44px;
+  gap: 20px;
   height: 44px;
   border-radius: var(--radius-full);
   background: var(--color-secondary);

@@ -76,6 +76,7 @@ export default function ProductCard({ product, inCart = 0, onAddToCart, onSelect
             disabled={outOfStock}
             onClick={() => onAddToCart?.(product)}
           >
+            {soldOut ? "SOLD OUT" : atCartLimit ? "ALL IN YOUR CART" : "ADD TO CART"}
             <ShoppingBag size={20} strokeWidth={1.75} aria-hidden="true" />
             {inCart > 0 && <span className="product-card__count">{inCart}</span>}
           </button>
