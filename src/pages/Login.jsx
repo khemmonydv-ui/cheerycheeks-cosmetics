@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { getAccounts } from "../api/accounts";
+import "./Login.css";
 import "./Signup.css";
+
 
 
 export default function Login() {

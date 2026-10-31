@@ -76,12 +76,6 @@ const ABOUT_STATS = [
 
 const TESTIMONIALS = [
 
-    {
-    quote: "Luxurious Swiss skincare designed to nourish, protect, and enhance your natural cheek color.",
-    name: "Song",
-    photo: SongPhoto,
-  },
-
   {
     quote: "Luxurious Swiss skincare designed to nourish, protect, and enhance your natural cheek color.",
     name: "Mony",
