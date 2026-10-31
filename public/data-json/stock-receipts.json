@@ -1,0 +1,26 @@
+[
+  {
+    "id":1,
+    "supplierId":1,
+    "actorId":2,
+    "invoiceNumber":"SUP-20261015-001",
+    "createdAt":"2026-10-15T10:00:00+07:00",
+    "items":[
+      {"productId":101,"quantity":20,"unitCost":5.00,"lineCost":100.00},
+      {"productId":102,"quantity":15,"unitCost":8.00,"lineCost":120.00}
+    ],
+    "totalCost":220.00
+  },
+  {
+    "id":2,
+    "supplierId":2,
+    "actorId":3,
+    "invoiceNumber":"SUP-20261016-002",
+    "createdAt":"2026-10-16T13:15:00+07:00",
+    "items":[
+      {"productId":301,"quantity":12,"unitCost":6.00,"lineCost":72.00},
+      {"productId":302,"quantity":10,"unitCost":5.50,"lineCost":55.00}
+    ],
+    "totalCost":127.00
+  }
+]
