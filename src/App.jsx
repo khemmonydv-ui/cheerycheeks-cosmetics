@@ -18,6 +18,9 @@ import AdminLogin from "./pages/admin/AdminLogin";
 import AdminSignup from "./pages/admin/AdminSignup";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminProducts from "./pages/admin/AdminProducts";
+import AdminOrders from "./pages/admin/AdminOrders";
+import AdminCustomers from "./pages/admin/AdminCustomers";
+import AdminCategories from "./pages/admin/AdminCategories";
 import Messages from "./pages/admin/Messages.jsx";
 import "./App.css";
 import { Timer } from "lucide-react";
@@ -30,7 +33,9 @@ function ScrollToTop() {
     if (hash) {
       // wait one moment so the page has finished drawing
       const timer = setTimeout(() => {
-        document.getElementById(hash.slice(1))?.scrollIntoView({ behavior: "smooth", block: "start" });
+        document
+          .getElementById(hash.slice(1))
+          ?.scrollIntoView({ behavior: "smooth", block: "start" });
       }, 50);
       return () => clearTimeout(timer);
     }
@@ -39,8 +44,6 @@ function ScrollToTop() {
 
   return null;
 }
-
-
 
 // Shop pages: header + footer around the page
 function PublicLayout() {
@@ -73,7 +76,10 @@ function App() {
               <Route path="/cart" element={<Cart />} />
               <Route path="/account" element={<Account />} />
               {/* Header and footer link to /product, so send it to /products */}
-              <Route path="/product" element={<Navigate to="/products" replace />} />
+              <Route
+                path="/product"
+                element={<Navigate to="/products" replace />}
+              />
             </Route>
 
             {/* ---------- Admin (no shop header or footer) ---------- */}
@@ -86,6 +92,9 @@ function App() {
                 <Route index element={<Navigate to="products" replace />} />
                 <Route path="dashboard" element={<AdminDashboard />} />
                 <Route path="products" element={<AdminProducts />} />
+                <Route path="orders" element={<AdminOrders />} />
+                <Route path="customers" element={<AdminCustomers />} />
+                <Route path="categories" element={<AdminCategories />} />
                 <Route path="massage" element={<Messages />} />
               </Route>
             </Route>

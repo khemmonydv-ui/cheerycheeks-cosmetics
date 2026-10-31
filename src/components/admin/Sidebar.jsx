@@ -1,13 +1,14 @@
-import { NavLink, useNavigate } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext';
-import { LogoutIcon } from './Icons';
+import { NavLink, useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
+import { LogoutIcon } from "./Icons";
 
 const links = [
-  { to: '/admin/dashboard', label: 'Dashboard' },
-  { to: '/admin/products', label: 'Products' },
-  { to: '/admin/massage', label: 'Massage' },
+  { to: "/admin/dashboard", label: "Dashboard" },
+  { to: "/admin/categories", label: "Categories" },
+  { to: "/admin/products", label: "Products" },
+  { to: "/admin/orders", label: "Orders" },
+  { to: "/admin/customers", label: "Customers" },
 ];
-
 
 export default function Sidebar() {
   const { logout } = useAuth();
@@ -15,7 +16,7 @@ export default function Sidebar() {
 
   const handleLogout = () => {
     logout();
-    navigate('/admin/login');
+    navigate("/admin/login");
   };
 
   return (
@@ -30,7 +31,9 @@ export default function Sidebar() {
           <NavLink
             key={l.to}
             to={l.to}
-            className={({ isActive }) => `adm-nav-link${isActive ? ' is-active' : ''}`}
+            className={({ isActive }) =>
+              `adm-nav-link${isActive ? " is-active" : ""}`
+            }
           >
             {l.label}
           </NavLink>
