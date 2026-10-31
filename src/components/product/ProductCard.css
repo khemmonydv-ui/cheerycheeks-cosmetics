@@ -284,11 +284,16 @@
   .product-card--shop .product-card__add:hover {
     transform: none;
   }
-  aspect-ratio: 1;
-  background: var(--gradient-hero);
-  color: var(--color-primary-light);
-  overflow: hidden;
+
+  /* Fixed: Properties are now properly nested inside a selector */
+  .product-card--shop {
+    aspect-ratio: 1;
+    background: var(--gradient-hero);
+    color: var(--color-primary-light);
+    overflow: hidden;
+  }
 }
+
 
 .product-card__media img {
   width: 100%;

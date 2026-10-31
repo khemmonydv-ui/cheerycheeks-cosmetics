@@ -34,9 +34,10 @@
 .product-card__media img {
   width: 100%;
   height: 100%;
-  object-fit: contain;
-  padding: var(--img-pad);
-  filter: var(--img-shadow);
+  object-fit: cover;      /* picture fills the whole frame */
+  object-position: center;
+  padding: 0;
+  filter: none;
   transition: transform var(--transition-slow);
 }
 
@@ -916,4 +917,19 @@
   .home-post__media {
     min-height: 0;
   }
+}
+
+/* ======================================
+   BESTSELLERS: picture fills the whole card frame
+   (kept last so nothing above can override it)
+====================================== */
+
+.home-bestsellers .product-card .product-card__media img,
+.home-bestsellers .product-card--shop .product-card__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover !important;
+  object-position: center;
+  padding: 0 !important;
+  filter: none !important;
 }

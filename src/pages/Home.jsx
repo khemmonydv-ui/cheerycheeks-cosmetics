@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   ArrowRight,
   ChevronRight,
@@ -28,7 +28,11 @@ import routinePhoto from "../assets/images/routine.jpg";
 import guidPhoto from "../assets/images/guid.jpg";
 import skincarePhoto from "../assets/images/skincare.jpg";
 import HeroShowcase from "../components/home/Heroshowcase";
+import ProductDetail from "../components/product/ProductDetail";
+import LoginPrompt from "../components/common/LoginPrompt";
+import { getCurrentUser } from "../utils/session";
 import { useProducts } from "../context/ProductsContext";
+import { useCart } from "../context/CartContext";
 import "./Home.css";
 
 
@@ -152,15 +156,34 @@ function ProductImage({ src, alt, size = 48 }) {
   );
 }
 
-function ProductCard({ product }) {
-  const { name, category, categoryId, price, oldPrice, rating, tag, image } = product;
+function ProductCard({ product, inCart = 0, onAddToCart, onSelect }) {
+  const { id, name, category, price, oldPrice, rating, tag, image } = product;
   const displayCategory = category || "Beauty";
   const currentPrice = Number(price) || 0;
   const previousPrice = Number(oldPrice) || 0;
   const productRating = Number(rating) || 0;
 
+  const stock = product.stock ?? product.stockQuantity;
+  const soldOut = stock != null && Number(stock) <= 0;
+  const atCartLimit = !soldOut && stock != null && inCart >= Number(stock);
+
+  const open = () => onSelect?.(id);
+
   return (
-    <article className="card product-card">
+    <article
+      className="card product-card"
+      style={{ cursor: "pointer" }}
+      role="button"
+      tabIndex={0}
+      aria-label={`View details for ${name}`}
+      onClick={open}
+      onKeyDown={(e) => {
+        if (e.target === e.currentTarget && (e.key === "Enter" || e.key === " ")) {
+          e.preventDefault();
+          open();
+        }
+      }}
+    >
       <div className="product-card__media">
         {tag && <span className="product-card__tag">{tag}</span>}
         <ProductImage src={image} alt={name} />
@@ -188,7 +211,16 @@ function ProductCard({ product }) {
             {previousPrice > 0 && <s>${previousPrice.toFixed(2)}</s>}
           </p>
 
-          <button type="button" className="product-card__add" aria-label={`Add ${name} to cart`}>
+          <button
+            type="button"
+            className="product-card__add"
+            aria-label={`Add ${name} to cart`}
+            disabled={soldOut || atCartLimit}
+            onClick={(e) => {
+              e.stopPropagation(); // do not open the details pop-up
+              onAddToCart?.(product);
+            }}
+          >
             <ShoppingBag size={20} strokeWidth={1.75} aria-hidden="true" />
           </button>
         </div>
@@ -364,7 +396,17 @@ function Journal() {
 ====================================================== */
 
 function Home() {
-  const { products: shopProducts, status: shopStatus } = useProducts(); // admin edits
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { products: shopProducts, status: shopStatus, addReview } = useProducts(); // admin edits + reviews
+  const { items, addToCart } = useCart();
+
+  const [selectedId, setSelectedId] = useState(null);
+  const [notice, setNotice] = useState("");
+  const [promptFor, setPromptFor] = useState("");
+  const noticeTimer = useRef(null);
+
+  useEffect(() => () => clearTimeout(noticeTimer.current), []);
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [categoriesLoading, setCategoriesLoading] = useState(true);
@@ -420,7 +462,7 @@ function Home() {
   );
   const bestSellers = (featuredProducts.length ? featuredProducts : products)
     .map((product) => {
-      // admin changes (picture, name, price, hidden, deleted) are saved in the shared context
+      // admin changes (picture, name, price, stock, reviews, hidden, deleted) live in the shared context
       const edited = shopProducts.find((item) => Number(item.id) === Number(product.id));
       return { ...product, edited };
     })
@@ -428,11 +470,43 @@ function Home() {
     .slice(0, 5)
     .map(({ edited, ...product }) => ({
       ...product,
-      name: edited?.name ?? product.name,
-      price: edited?.price ?? product.price,
-      category: categories.find((item) => item.id === product.categoryId)?.name || product.category,
+      ...(edited || {}),
+      category:
+        edited?.category ||
+        categories.find((item) => item.id === product.categoryId)?.name ||
+        product.category,
       image: edited?.image || product.image || null,
     }));
+
+  /* ---- same behaviour as the Products page ---- */
+  const inCart = new Map(items.map((item) => [item.id, item.qty]));
+  const selected = bestSellers.find((product) => Number(product.id) === Number(selectedId));
+
+  const closeDetail = useCallback(() => setSelectedId(null), []);
+  const closePrompt = useCallback(() => setPromptFor(""), []);
+
+  const handleAddToCart = (product) => {
+    // must be logged in before adding to cart
+    if (!getCurrentUser()) {
+      setPromptFor(product.name);
+      return;
+    }
+    if (!addToCart(product)) return;
+
+    setNotice(`${product.name} added to your cart`);
+    clearTimeout(noticeTimer.current);
+    noticeTimer.current = setTimeout(() => setNotice(""), 2200);
+  };
+
+  const goTo = (path) => {
+    setPromptFor("");
+    navigate(path, {
+      state: {
+        from: location.pathname + location.search,
+        notice: "Please log in or create an account to add products to your cart.",
+      },
+    });
+  };
 
   return (
     <>
@@ -542,7 +616,13 @@ function Home() {
               <p>No products found in products.json.</p>
             )}
             {bestSellers.map((product) => (
-              <ProductCard key={product.id} product={product} />
+              <ProductCard
+                key={product.id}
+                product={product}
+                inCart={inCart.get(product.id) ?? 0}
+                onAddToCart={handleAddToCart}
+                onSelect={setSelectedId}
+              />
             ))}
           </div>
         </div>
@@ -557,6 +637,33 @@ function Home() {
 
       {/* Journal */}
       <Journal />
+
+      {/* Product details pop-up (same as the Products page) */}
+      {selected && (
+        <ProductDetail
+          key={selected.id}
+          product={selected}
+          inCart={inCart.get(selected.id) ?? 0}
+          onClose={closeDetail}
+          onAddToCart={handleAddToCart}
+          onAddReview={addReview}
+        />
+      )}
+
+      {/* Login / sign up prompt when not logged in */}
+      {promptFor && (
+        <LoginPrompt
+          productName={promptFor}
+          onLogin={() => goTo("/login")}
+          onSignup={() => goTo("/signup")}
+          onClose={closePrompt}
+        />
+      )}
+
+      {/* "Added to cart" message */}
+      <div className={notice ? "toast show" : "toast"} role="status" aria-live="polite">
+        {notice}
+      </div>
     </>
   );
 }
