@@ -80,15 +80,20 @@ const columns = [
     ],
   },
  
+  // In Footer.jsx: replace the whole "Company" column with this.
+// Every link goes to the About page (a section on it).
   {
     title: "Company",
     links: [
       { label: "About Us", to: "/about" },
-      { label: "Our Story", to: "/story" },
-      { label: "Blog", to: "/blog" },
-      { label: "Careers", to: "/careers" },
+      { label: "Our Story", to: "/about#story" },
+      { label: "Why Choose Us", to: "/about#why-choose-us" },
+      { label: "How We Work", to: "/about#process" },
+      { label: "Our Impact", to: "/about#impact" },
+      { label: "FAQ", to: "/about#faq" },
     ],
   },
+  
   {
     title: "Contact Us",
     links: [

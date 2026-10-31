@@ -240,7 +240,7 @@ function SectionHead({ eyebrow, title, to, linkLabel }) {
       {to && (
         <Link to={to} className="home-head__link">
           {linkLabel}
-          <ChevronRight size={18} strokeWidth={2} aria-hidden="true" />
+         
         </Link>
       )}
     </div>
@@ -538,7 +538,6 @@ function Home() {
             eyebrow="Best categories"
             title="Curated for your beauty"
             to="/products"
-            linkLabel="View all categories"
           />
 
           <div className="home-cats">

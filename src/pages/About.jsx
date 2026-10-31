@@ -75,7 +75,7 @@ export default function About() {
         </div>
       </section>
 
-      <section className="section section--flush-top">
+      <section className="section section--flush-top" id="favourites">
         <div className="container">
           <SectionHeading title={favourites.title} subtitle={favourites.subtitle} />
           {categoryLoading && <p>Loading categories...</p>}
@@ -96,7 +96,7 @@ export default function About() {
         </div>
       </section>
 
-      <section className="section section--lavender">
+      <section className="section section--lavender" id="why-choose-us">
         <div className="container">
           <SectionHeading title={whyChooseUs.title} tone="dark" />
           <div className="grid grid-3">
@@ -107,7 +107,7 @@ export default function About() {
         </div>
       </section>
 
-      <section className="section">
+      <section className="section" id="process">
         <div className="container">
           <SectionHeading title={process.title} subtitle={process.subtitle} />
           <div className="grid grid-4">
@@ -118,7 +118,7 @@ export default function About() {
         </div>
       </section>
 
-      <section className="section section--lavender">
+      <section className="section section--lavender" id="impact">
         <div className="container">
           <SectionHeading title={impact.title} subtitle={impact.subtitle} uppercase />
           <div className="grid grid-3">
@@ -129,7 +129,7 @@ export default function About() {
         </div>
       </section>
 
-      <section className="section">
+      <section className="section" id="faq">
         <div className="container">
           <SectionHeading title={faq.title} />
           <div className="faq-list">

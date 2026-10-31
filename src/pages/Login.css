@@ -49,3 +49,28 @@
 .login-form { display: flex; flex-direction: column; gap: var(--space-5); }
 .login-row { display: flex; justify-content: flex-end; margin-top: calc(var(--space-2) * -1); font-size: var(--text-sm); }
 .login-footer { margin-top: var(--space-6); text-align: center; font-size: var(--text-sm); color: var(--color-muted); }
+
+
+
+/* back to home  */
+
+.signup-back {
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  margin-top: var(--space-4);
+  padding: 10px 16px;
+  border: 1.5px solid var(--color-primary);
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 600px;
+  text-decoration: none;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+
+.signup-back:hover {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+}

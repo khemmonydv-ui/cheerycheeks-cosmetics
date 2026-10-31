@@ -20,17 +20,27 @@ import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminProducts from "./pages/admin/AdminProducts";
 import Messages from "./pages/admin/Messages.jsx";
 import "./App.css";
+import { Timer } from "lucide-react";
 
 // Scroll back to the top whenever the page changes
 function ScrollToTop() {
-  const { pathname } = useLocation();
+  const { pathname, hash } = useLocation();
 
   useEffect(() => {
+    if (hash) {
+      // wait one moment so the page has finished drawing
+      const timer = setTimeout(() => {
+        document.getElementById(hash.slice(1))?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 50);
+      return () => clearTimeout(timer);
+    }
     window.scrollTo(0, 0);
-  }, [pathname]);
+  }, [pathname, hash]);
 
   return null;
 }
+
+
 
 // Shop pages: header + footer around the page
 function PublicLayout() {

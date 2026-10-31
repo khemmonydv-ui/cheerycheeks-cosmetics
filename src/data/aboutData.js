@@ -1,12 +1,16 @@
 // All page content lives here, so the components stay purely presentational.
 // Replace the image paths with your own files (in /public/images/about/).
 
+// Put this import at the TOP of src/data/aboutData.js
+import relaxing from '../assets/images/relaxing.jpg';
+
+// Replace your existing `export const hero = { ... }` with this
 export const hero = {
   eyebrow: 'About our beauty brand',
-  title: 'About our beauty brand',
+  title: 'Beauty that feels as good as it looks',
   text: 'Discover premium cosmetics designed to enhance your natural beauty. We create high-quality products that help you feel confident every day, with gentle formulas, soft shades and honest advice.',
-  image: 'src/assets/images/ba.jpg',
-  imageAlt: '',
+  image: relaxing,
+  imageAlt: 'A woman relaxing with her skincare routine',
   cta: { label: 'Read our story', href: '#story' },
 };
 

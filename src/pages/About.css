@@ -52,6 +52,8 @@
 
 /* ======================================
    HERO SECTION
+   Full-width photo, soft pink fade on the left for the text,
+   a small label with a line, a bold title and a pill button.
 ====================================== */
 
 .about-hero {
@@ -59,33 +61,60 @@
   display: flex;
   align-items: center;
   min-height: 480px;
-  background: #F8C9DD;
+  background: #f8c9dd;
   overflow: hidden;
+  isolation: isolate;
 }
 
-/* Hero background image */
+/* Hero background image (slow zoom so it feels alive) */
 
 .about-hero__bg {
   position: absolute;
   inset: 0;
+  z-index: -2;
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: center right;
+  transform-origin: 70% 50%;
+  animation: about-hero-zoom 18s ease-out both;
 }
 
-/* Overlay to improve text readability */
+@keyframes about-hero-zoom {
+  from { transform: scale(1.08); }
+  to   { transform: scale(1); }
+}
+
+/* Fade: pink on the left (text side) -> clear on the right (photo side) */
 
 .about-hero::after {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    90deg,
-    rgba(248, 201, 221, 0.65) 0%,
-    rgba(248, 201, 221, 0.35) 42%,
-    rgba(248, 201, 221, 0) 72%
-  );
+  z-index: -1;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(253, 238, 245, 0.96) 0%,
+      rgba(250, 219, 234, 0.82) 34%,
+      rgba(248, 201, 221, 0.38) 60%,
+      rgba(248, 201, 221, 0) 82%
+    );
+  pointer-events: none;
+}
+
+/* Soft light circle behind the text */
+
+.about-hero::before {
+  content: '';
+  position: absolute;
+  top: -140px;
+  left: -120px;
+  z-index: -1;
+  width: 420px;
+  height: 420px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.65), rgba(255, 255, 255, 0) 70%);
   pointer-events: none;
 }
 
@@ -104,21 +133,39 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 18px;
+  gap: 20px;
   width: 100%;
   max-width: 540px;
+  animation: about-hero-in 0.7s ease both;
 }
 
-/* Hero label, e.g. ABOUT OUR BEAUTY BRAND */
+@keyframes about-hero-in {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Small label with a line before it */
 
 .about-hero__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
   margin: 0;
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 700;
   line-height: 1.5;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--color-primary);
+}
+
+.about-hero__eyebrow::before {
+  content: '';
+  width: 36px;
+  height: 2px;
+  border-radius: 2px;
+  background: currentColor;
+  opacity: 0.7;
 }
 
 /* Main hero title */
@@ -127,56 +174,85 @@
   margin: 0;
   max-width: 540px;
   font-size: clamp(2.25rem, 3.5vw, 3rem);
-  font-weight: 700;
-  line-height: 1.15;
-  letter-spacing: -0.025em;
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
   color: var(--color-primary);
+  text-wrap: balance;
 }
 
 /* Hero description */
 
 .about-hero__text {
   margin: 0;
-  max-width: 520px;
+  max-width: 480px;
   font-family: var(--font-body);
   font-size: 17px;
   font-weight: 400;
   line-height: 1.8;
-  color: var(--color-text);
+  color: #4a3b52;
 }
 
 /* Hero button container */
 
 .about-hero__actions {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: var(--space-3);
-  margin-top: 4px;
+  margin-top: 6px;
 }
 
-/* Hero button
-   Applies to links and buttons inside the actions container.
-*/
+/* Hero button: filled pill with an arrow, lifts on hover */
 
 .about-hero__actions a,
 .about-hero__actions button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 44px;
-  padding: 12px 24px;
+  gap: 10px;
+  min-height: 48px;
+  padding: 13px 28px;
   border: none;
   border-radius: 999px;
+  background: var(--color-primary);
+  color: var(--color-white);
   font-family: var(--font-body);
-  font-size: 14px;
-  font-weight: 500;
+  font-size: 15px;
+  font-weight: 600;
   line-height: 1.4;
   text-decoration: none;
+  box-shadow: 0 10px 24px rgba(96, 76, 121, 0.28);
   cursor: pointer;
   transition:
     background-color 0.25s ease,
-    color 0.25s ease,
+    box-shadow 0.25s ease,
     transform 0.25s ease;
+}
+
+.about-hero__actions a::after,
+.about-hero__actions button::after {
+  content: '\2192';
+  font-size: 1.1em;
+  transition: transform 0.25s ease;
+}
+
+.about-hero__actions a:hover,
+.about-hero__actions button:hover {
+  background: var(--color-primary-hover, var(--color-primary));
+  box-shadow: 0 14px 30px rgba(96, 76, 121, 0.36);
+  transform: translateY(-2px);
+}
+
+.about-hero__actions a:hover::after,
+.about-hero__actions button:hover::after {
+  transform: translateX(4px);
+}
+
+.about-hero__actions a:focus-visible,
+.about-hero__actions button:focus-visible {
+  outline: 3px solid rgba(96, 76, 121, 0.45);
+  outline-offset: 3px;
 }
 
 /* ======================================
@@ -553,9 +629,9 @@
   .about-hero::after {
     background: linear-gradient(
       90deg,
-      rgba(248, 201, 221, 0.85) 0%,
-      rgba(248, 201, 221, 0.72) 55%,
-      rgba(248, 201, 221, 0.35) 100%
+      rgba(253, 238, 245, 0.94) 0%,
+      rgba(250, 219, 234, 0.82) 55%,
+      rgba(248, 201, 221, 0.5) 100%
     );
   }
 
@@ -615,6 +691,16 @@
 ====================================== */
 
 @media (prefers-reduced-motion: reduce) {
+  .about-hero__bg,
+  .about-hero__content {
+    animation: none;
+  }
+
+  .about-hero__actions a:hover,
+  .about-hero__actions button:hover {
+    transform: none;
+  }
+
   .product-card__image img,
   .faq-item,
   .faq-item__question::after,
@@ -626,4 +712,11 @@
   .product-card:hover .product-card__image img {
     transform: none;
   }
+}
+
+
+/* Add anywhere in About.css: keeps the section title below the sticky header
+   when a footer link scrolls to it. Change 90px to your header height. */
+.about-page [id] {
+  scroll-margin-top: 90px;
 }
